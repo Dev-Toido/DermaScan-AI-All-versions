@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: dermascan-backend
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /
+    envVars:
+      - key: FRONTEND_URL
+        sync: false
