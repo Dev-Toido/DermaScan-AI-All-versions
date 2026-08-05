@@ -1,0 +1,30 @@
+# Datasets and Archives
+data/
+*.zip
+HAM10000_metadata.csv
+
+# Python Caches & Envs
+__pycache__/
+*.pyc
+ai_env/
+.env
+
+# Next.js Cache & Modules
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+
+# Gradio cache
+.gradio/
+
+# Training Scripts (Not needed to run website)
+train.py
+train_hierarchical.py
+finetune.py
+finetune_densenet.py
+Model_Finetune.py
+Model.py
+
+# Ignore all models except the final finetuned DenseNet required by app.py
+models/*
+!models/dermascan_densenet_finetuned.pth

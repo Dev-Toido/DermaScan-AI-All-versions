@@ -1,0 +1,23 @@
+Accuracy: 0.5400
+Average Inference Time: 0.1600 seconds/image
+
+Sensitivity for Malignant Classes:
+- MEL (Melanoma): 0.4200
+- BCC (Basal Cell Carcinoma): 0.5800
+- SCC (Squamous Cell Carcinoma): 0.0000 (Note: Model does not predict SCC)
+
+Classification Report:
+              precision    recall  f1-score   support
+
+         MEL       0.51      0.42      0.46        50
+          NV       0.61      0.72      0.66        50
+         BCC       0.47      0.58      0.52        50
+          AK       0.31      0.56      0.40        50
+         BKL       0.53      0.54      0.53        50
+          DF       0.69      0.72      0.71        50
+        VASC       0.89      0.78      0.83        50
+         SCC       0.00      0.00      0.00        50
+
+    accuracy                           0.54       400
+   macro avg       0.50      0.54      0.51       400
+weighted avg       0.50      0.54      0.51       400
