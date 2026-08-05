@@ -1,0 +1,9 @@
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.env
+.venv
+data/
+# keep demo_images/ and dermascan_v3_best.keras

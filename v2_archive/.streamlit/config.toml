@@ -1,0 +1,15 @@
+[theme]
+# Medical Teal for primary actions (buttons, progress bars)
+primaryColor = "#0EA5E9"
+
+# Deep Slate Blue for the main background
+backgroundColor = "#0F172A"
+
+# Slightly lighter slate for the input cards and containers
+secondaryBackgroundColor = "#1E293B"
+
+# Crisp off-white for maximum text readability
+textColor = "#F8FAFC"
+
+# Clean system sans-serif font
+font = "sans serif"

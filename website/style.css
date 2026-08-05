@@ -1,0 +1,214 @@
+/* DermaScan AI V3 - Marketing Website CSS */
+
+body {
+    scroll-behavior: smooth;
+}
+
+/* Glassmorphism Navigation */
+.glass-nav {
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Glass Cards */
+.glass-card {
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Gradient Buttons */
+.btn-primary {
+    background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+    color: white;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-block;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(20, 184, 166, 0.4);
+    background: linear-gradient(135deg, #2dd4bf 0%, #14b8a6 100%);
+}
+
+/* Multi-modal Animation Concept */
+.fusion-node {
+    transition: all 0.5s ease;
+}
+
+.fusion-line {
+    overflow: hidden;
+}
+
+/* Particles flowing along the line */
+.particle-flow {
+    animation: flowRight 2s infinite linear;
+}
+
+.particle-flow-reverse {
+    animation: flowLeft 2s infinite linear;
+}
+
+@keyframes flowRight {
+    0% { left: 0; opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { left: 50%; opacity: 0; }
+}
+
+@keyframes flowLeft {
+    0% { right: 0; opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { right: 50%; opacity: 0; }
+}
+
+/* When the center node is hovered */
+.group:hover ~ .absolute .particle-flow,
+.group:hover ~ .absolute .particle-flow-reverse {
+    animation-duration: 1s;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #0f172a;
+}
+::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+}
+
+/* Modal specific animations */
+.modal-open {
+    overflow: hidden;
+}
+
+/* Grad-CAM Slider */
+.gradcam-container {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 0 auto;
+}
+.gradcam-original {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+}
+.gradcam-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 50%; height: 100%;
+    object-fit: cover;
+    mix-blend-mode: overlay;
+    border-right: 2px solid #14b8a6;
+}
+.gradcam-slider {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    opacity: 0;
+    cursor: ew-resize;
+}
+
+/* Risk Bar */
+.risk-bar-container {
+    width: 100%;
+    height: 30px;
+    border-radius: 15px;
+    display: flex;
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+}
+.risk-segment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    transition: width 1s ease-in-out;
+}
+.risk-benign { background-color: #22c55e; width: 0%; }
+.risk-pre { background-color: #f59e0b; width: 0%; }
+.risk-malignant { background-color: #ef4444; width: 0%; }
+
+/* Speedometer Gauge */
+.gauge-container {
+    position: relative;
+    width: 250px;
+    height: 125px;
+    overflow: hidden;
+    margin: 0 auto;
+}
+.gauge-arc {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    border: 20px solid #334155;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    transform: rotate(-45deg);
+    position: absolute;
+    top: 0; left: 0;
+}
+.gauge-arc-active {
+    border-color: #14b8a6;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.gauge-needle {
+    width: 4px;
+    height: 110px;
+    background: #fff;
+    position: absolute;
+    bottom: 0;
+    left: 123px;
+    transform-origin: bottom center;
+    transform: rotate(-90deg);
+    transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 2px;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+    width: 60px;
+    height: 30px;
+    background-color: #334155;
+    border-radius: 15px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin: 0 auto;
+}
+.toggle-switch.active {
+    background-color: #14b8a6;
+}
+.toggle-circle {
+    width: 26px;
+    height: 26px;
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: left 0.3s;
+}
+.toggle-switch.active .toggle-circle {
+    left: 32px;
+}

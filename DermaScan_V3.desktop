@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=DermaScan AI V3
+Comment=Clinical Decision Support Tool for Dermatology
+Exec=/home/dev-toido/DermaScan-AI-V3/run_dermascan.sh
+Path=/home/dev-toido/DermaScan-AI-V3
+Icon=medical-cross
+Terminal=true
+Type=Application
+Categories=Science;MedicalSoftware;

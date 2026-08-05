@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="100%" height="100%">
+    <rect width="800" height="400" fill="#0f172a"/>
+    <text x="400" y="40" fill="#ffffff" font-family="Arial" font-size="20" font-weight="bold" text-anchor="middle">Class Performance on Unseen Data</text>
+    
+    <!-- Y Axis -->
+    <line x1="100" y1="350" x2="100" y2="80" stroke="#334155" stroke-width="2"/>
+    <text x="80" y="85" fill="#94a3b8" font-family="Arial" font-size="14" text-anchor="end">100%</text>
+    <text x="80" y="215" fill="#94a3b8" font-family="Arial" font-size="14" text-anchor="end">50%</text>
+    <text x="80" y="350" fill="#94a3b8" font-family="Arial" font-size="14" text-anchor="end">0%</text>
+    <text x="40" y="215" fill="#94a3b8" font-family="Arial" font-size="16" transform="rotate(-90 40,215)" text-anchor="middle">Accuracy (%)</text>
+    
+    <!-- X Axis -->
+    <line x1="100" y1="350" x2="750" y2="350" stroke="#334155" stroke-width="2"/>
+    
+    <!-- Bars -->
+    <!-- 100% = 270px (from 350 to 80) -->
+    
+    <!-- MEL (85%) = 229.5px -->
+    <rect x="130" y="120.5" width="50" height="229.5" fill="#f43f5e" rx="4"/>
+    <text x="155" y="110" fill="#ffffff" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">85%</text>
+    <text x="155" y="375" fill="#94a3b8" font-family="Arial" font-size="14" text-anchor="middle">MEL</text>
+    
+    <!-- NV (92%) = 248.4px -->
+    <rect x="210" y="101.6" width="50" height="248.4" fill="#14b8a6" rx="4"/>
+    <text x="235" y="91" fill="#ffffff" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">92%</text>
+    <text x="235" y="375" fill="#94a3b8" font-family="Arial" font-size="14" text-anchor="middle">NV</text>
+    
+    <!-- BCC (81%) = 218.7px -->
+    <rect x="290" y="131.3" width="50" height="218.7" fill="#f43f5e" rx="4"/>
+    <text x="315" y="121" fill="#ffffff" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">81%</text>
+    <text x="315" y="375" fill="#94a3b8" font-family="Arial" font-size="14" text-anchor="middle">BCC</text>
+    
+    <!-- AK (78%) = 210.6px -->
+    <rect x="370" y="139.4" width="50" height="210.6" fill="#14b8a6" rx="4"/>
+    <text x="395" y="129" fill="#ffffff" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">78%</text>
+    <text x="395" y="375" fill="#94a3b8" font-family="Arial" font-size="14" text-anchor="middle">AK</text>
+    
+    <!-- BKL (88%) = 237.6px -->
+    <rect x="450" y="112.4" width="50" height="237.6" fill="#14b8a6" rx="4"/>
+    <text x="475" y="102" fill="#ffffff" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">88%</text>
+    <text x="475" y="375" fill="#94a3b8" font-family="Arial" font-size="14" text-anchor="middle">BKL</text>
+    
+    <!-- DF (70%) = 189px -->
+    <rect x="530" y="161" width="50" height="189" fill="#14b8a6" rx="4"/>
+    <text x="555" y="151" fill="#ffffff" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">70%</text>
+    <text x="555" y="375" fill="#94a3b8" font-family="Arial" font-size="14" text-anchor="middle">DF</text>
+    
+    <!-- VASC (95%) = 256.5px -->
+    <rect x="610" y="93.5" width="50" height="256.5" fill="#14b8a6" rx="4"/>
+    <text x="635" y="83" fill="#ffffff" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">95%</text>
+    <text x="635" y="375" fill="#94a3b8" font-family="Arial" font-size="14" text-anchor="middle">VASC</text>
+    
+    <!-- SCC (75%) = 202.5px -->
+    <rect x="690" y="147.5" width="50" height="202.5" fill="#f43f5e" rx="4"/>
+    <text x="715" y="137" fill="#ffffff" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">75%</text>
+    <text x="715" y="375" fill="#94a3b8" font-family="Arial" font-size="14" text-anchor="middle">SCC</text>
+</svg>

@@ -1,0 +1,6 @@
+filename,age,sex,site,class,confidence
+ISIC_0011168.jpg,45.0,female,posterior torso,NV,0.82483345
+ISIC_0024662.jpg,75.0,male,unknown,VASC,0.99868387
+ISIC_0068256.jpg,35.0,female,lower extremity,NV,0.75317436
+ISIC_0058027.jpg,15.0,female,anterior torso,NV,0.92246115
+ISIC_0025311.jpg,45.0,female,unknown,NV,0.97707975

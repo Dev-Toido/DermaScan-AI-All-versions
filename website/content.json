@@ -1,0 +1,111 @@
+{
+  "hero": {
+    "title": "DermaScan AI V3",
+    "subtitle": "Clinical Decision Support for the Modern Dermatologist.",
+    "cta": "View Live Demo",
+    "description": "Fusing visual pattern recognition with biological metadata to provide explainable, safe, and accurate skin lesion triage."
+  },
+  "problem": {
+    "heading": "The Diagnostic Gap",
+    "text": "In many parts of the world, a severe shortage of dermatologists leads to delayed diagnosis of skin cancers, costing lives. General practitioners need reliable second opinions to triage effectively.",
+    "stats": [
+      {
+        "number": "8",
+        "label": "Diagnostic Categories Handled"
+      },
+      {
+        "number": "<2s",
+        "label": "Inference Latency"
+      }
+    ]
+  },
+  "solution": {
+    "heading": "Multi-Modal Intelligence",
+    "text": "Unlike traditional models that only look at pixels, DermaScan AI fuses high-resolution dermoscopic imagery with critical patient metadata (age, sex, anatomical site) to mirror how a real clinician makes a diagnosis."
+  },
+  "features": [
+    {
+      "id": "f1",
+      "icon": "ph-cpu",
+      "title": "Multi-Modal AI Architecture",
+      "teaser": "Image and metadata fusion.",
+      "text": "DermaScan AI fuses visual patterns from dermoscopic images with biological metadata (age, sex, anatomical site) to make a holistic prediction, just like a dermatologist considers patient context.",
+      "visual_type": "diagram_multimodal"
+    },
+    {
+      "id": "f2",
+      "icon": "ph-graph",
+      "title": "EfficientNetB4 Backbone",
+      "teaser": "State-of-the-art vision model.",
+      "text": "We use EfficientNetB4, a state-of-the-art convolutional neural network pre-trained on ImageNet, providing a powerful 1792-dimensional image embedding while remaining computationally efficient.",
+      "visual_type": "diagram_network"
+    },
+    {
+      "id": "f3",
+      "icon": "ph-eye",
+      "title": "Grad-CAM Explainability",
+      "teaser": "See exactly what the AI sees.",
+      "text": "Grad-CAM highlights the image regions the AI focused on. This builds clinician trust and helps identify if the model is looking at the right area.",
+      "visual_type": "slider_gradcam"
+    },
+    {
+      "id": "f4",
+      "icon": "ph-chart-bar",
+      "title": "Clinical Risk Mapping",
+      "teaser": "Actionable categories.",
+      "text": "Predictions are grouped into clinically meaningful categories with corresponding urgency levels and recommendations, making the output directly actionable.",
+      "visual_type": "risk_bar"
+    },
+    {
+      "id": "f5",
+      "icon": "ph-shield-check",
+      "title": "Safety Net Threshold",
+      "teaser": "Knows when it doesn't know.",
+      "text": "If the AI is less than 60% confident, it does not guess. Instead, it advises consulting a dermatologist, preventing potentially dangerous misdiagnoses.",
+      "visual_type": "gauge_speedometer"
+    },
+    {
+      "id": "f6",
+      "icon": "ph-laptop",
+      "title": "Offline Capability",
+      "teaser": "No internet required.",
+      "text": "The entire system runs locally on a standard laptop. No internet connection is needed, making it suitable for rural clinics and privacy-sensitive environments.",
+      "visual_type": "offline_icon"
+    },
+    {
+      "id": "f7",
+      "icon": "ph-file-pdf",
+      "title": "PDF Report Generation",
+      "teaser": "One-click clinical reports.",
+      "text": "A comprehensive clinical report (PDF) is generated with a single click, containing the image, heatmap, differential diagnosis, and disclaimer — ready for the patient's file.",
+      "visual_type": "pdf_mockup"
+    },
+    {
+      "id": "f8",
+      "icon": "ph-user-list",
+      "title": "Patient Metadata Integration",
+      "teaser": "Age, sex, and lesion site.",
+      "text": "Incorporating patient context (age, sex, lesion location) enables the model to adjust its prediction based on known epidemiological risk factors.",
+      "visual_type": "form_sliders"
+    },
+    {
+      "id": "f9",
+      "icon": "ph-toggle-right",
+      "title": "Demo Mode",
+      "teaser": "Adjustable presentation sensitivity.",
+      "text": "A special Demo Mode temporarily lowers the confidence threshold, allowing the AI to provide concrete answers during presentations while still clearly indicating its experimental nature.",
+      "visual_type": "toggle_switch"
+    },
+    {
+      "id": "f10",
+      "icon": "ph-chart-pie-slice",
+      "title": "Real-World Performance",
+      "teaser": "65.7% accuracy on unseen data.",
+      "text": "Evaluated on 3,800 unseen test images, DermaScan AI achieves 65.7% overall accuracy, with excellent recall on vascular lesions and a robust safety net for challenging cases.",
+      "visual_type": "performance_chart"
+    }
+  ],
+  "footer": {
+    "disclaimer": "⚠️ ACADEMIC PROTOTYPE – Not for clinical use. This tool is designed to assist, not replace, a medical professional."
+  }
+}
