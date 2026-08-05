@@ -17,7 +17,7 @@ const V3_SITES = [
   "Upper extremity",
 ];
 
-const API_BASE = "http://localhost:8000";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 // ── Risk Badge Styling ──────────────────────────────────────────────────────
 function getRiskStyles(riskGroup: string, riskColor: string) {
@@ -884,12 +884,12 @@ export default function LandingAndDashboard() {
           </div>
 
           <motion.div 
-            className="relative w-full aspect-video md:aspect-[21/9] rounded-2xl overflow-hidden border border-white/30 bg-[#0d1928] shadow-[0_30px_60px_rgba(0,0,0,0.6)] group"
+            className="relative w-full max-w-4xl mx-auto aspect-video rounded-2xl overflow-hidden border border-white/30 bg-[#0d1928] shadow-[0_30px_60px_rgba(0,0,0,0.6)] group"
           >
             {/* Bottom Layer: Original Image */}
             <div className="absolute inset-0">
-              <img src="/dermoscopy-demo.jpg" alt="Original" className="w-full h-full object-cover pointer-events-none" />
-              <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md text-white text-[10px] px-3 py-1.5 rounded-md font-bold uppercase tracking-wider border border-white/20 shadow-lg pointer-events-none z-10">Original Scan</div>
+              <img src="/demo_original.jpg" alt="Original" className="w-full h-full object-cover pointer-events-none" />
+              <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md text-white text-[10px] px-3 py-1.5 rounded-md font-bold uppercase tracking-wider border border-white/20 shadow-lg pointer-events-none z-10">Original Image</div>
             </div>
 
             {/* Top Layer: Heatmap */}
@@ -897,8 +897,7 @@ export default function LandingAndDashboard() {
               className="absolute inset-0 z-10 pointer-events-none"
               style={{ clipPath: `inset(0 ${100 - sliderValue}% 0 0)` }}
             >
-              <img src="/dermoscopy-demo.jpg" alt="Heatmap" className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/70 via-green-500/80 to-red-600/90 mix-blend-screen opacity-90" />
+              <img src="/demo_heatmap.jpg" alt="Heatmap" className="w-full h-full object-cover" />
               <div className="absolute top-4 right-4 bg-[#00D4FF]/20 text-[#00D4FF] backdrop-blur-md text-[10px] px-3 py-1.5 rounded-md font-bold uppercase tracking-wider border border-[#00D4FF]/40 shadow-[0_0_15px_rgba(0,212,255,0.3)] z-10">Grad-CAM Overlay</div>
             </div>
 

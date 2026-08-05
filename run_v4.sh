@@ -54,7 +54,7 @@ if ! command -v node &> /dev/null; then
 fi
 
 # Check if model exists
-if [ ! -f "v4/backend/dermascan_v3_best.keras" ] && [ ! -f "dermascan_v3_best.keras" ]; then
+if [ ! -f "v3/dermascan_v3_best.keras" ] && [ ! -f "v4/backend/dermascan_v3_best.keras" ] && [ ! -f "dermascan_v3_best.keras" ]; then
     echo -e "${YELLOW}Warning: Model file 'dermascan_v3_best.keras' not found!${NC}"
     echo -e "${YELLOW}The backend will start but predictions will fail.${NC}"
 fi

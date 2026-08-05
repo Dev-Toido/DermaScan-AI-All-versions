@@ -23,10 +23,19 @@ def generate_gradcam(model, image_array, class_idx, meta_features=None):
     if conv_layer is None:
         raise ValueError("Could not find a valid 4D convolutional layer for Grad-CAM.")
         
-    # Build a grad model that outputs both the conv layer activation and the final prediction
+    # Get the final Dense layer to compute logits (bypassing softmax for better gradients)
+    final_layer = model.layers[-1]
+    use_logits = isinstance(final_layer, tf.keras.layers.Dense)
+    
+    if use_logits:
+        output_tensor = final_layer.input
+    else:
+        output_tensor = model.output
+        
+    # Build a grad model that outputs both the conv layer activation and the prediction/pre-prediction tensor
     grad_model = tf.keras.models.Model(
         inputs=model.inputs,
-        outputs=[conv_layer.output, model.output]
+        outputs=[conv_layer.output, output_tensor]
     )
     
     # Prepare the inputs
@@ -41,7 +50,13 @@ def generate_gradcam(model, image_array, class_idx, meta_features=None):
     # 2. Gradient Calculation
     with tf.GradientTape() as tape:
         conv_outputs, predictions = grad_model([img_input, meta_features])
-        top_class_score = predictions[:, class_idx]
+        
+        if use_logits:
+            # Manually compute the pre-softmax logit for the target class
+            logits = tf.matmul(predictions, final_layer.kernel) + final_layer.bias
+            top_class_score = logits[:, class_idx]
+        else:
+            top_class_score = predictions[:, class_idx]
     
     grads = tape.gradient(top_class_score, conv_outputs)
     
@@ -75,13 +90,16 @@ def overlay_heatmap(image_array, heatmap, alpha=0.5):
     """
     Superimpose the heatmap on the original image.
     """
-    # Convert image to uint8 [0,255]
+    # Convert image to uint8 [0,255] (This image is RGB)
     img_uint8 = np.uint8(np.clip(255 * image_array, 0, 255))
     
     # Apply a colormap to the heatmap (jet)
     heatmap_colored = np.uint8(255 * heatmap)
-    heatmap_colored = cv2.applyColorMap(heatmap_colored, cv2.COLORMAP_JET)
+    heatmap_colored_bgr = cv2.applyColorMap(heatmap_colored, cv2.COLORMAP_JET)
     
-    # Blend perfectly aligned
-    superimposed = cv2.addWeighted(img_uint8, 1 - alpha, heatmap_colored, alpha, 0)
-    return superimposed
+    # JET Colormap outputs BGR, so we MUST convert to RGB to match img_uint8!
+    heatmap_colored_rgb = cv2.cvtColor(heatmap_colored_bgr, cv2.COLOR_BGR2RGB)
+    
+    # Blend perfectly aligned in RGB space
+    superimposed_rgb = cv2.addWeighted(img_uint8, 1 - alpha, heatmap_colored_rgb, alpha, 0)
+    return superimposed_rgb

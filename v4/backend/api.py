@@ -111,9 +111,10 @@ app = FastAPI(
 )
 
 # CORS for Next.js frontend
+frontend_url = os.environ.get("FRONTEND_URL", "*")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[frontend_url] if frontend_url != "*" else ["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -181,20 +182,19 @@ async def analyze_lesion(
     # ── 2. Open image ───────────────────────────────────────────────────────
     image_pil = Image.open(io.BytesIO(contents)).convert("RGB")
     img_cv2 = np.array(image_pil)
-
+    
     skin_lesion_ok = check_skin_lesion(img_cv2)
 
     # ── 3. Preprocess image (fixed) ─────────────────────────────────────────
-    # Fix Aspect Ratios: Use BORDER_REFLECT to prevent artificial edges
+    # Fix Aspect Ratios: Use Center Crop to prevent artificial edges
     h, w = img_cv2.shape[:2]
     max_dim = max(h, w)
-    top = (max_dim - h) // 2
-    bottom = max_dim - h - top
-    left = (max_dim - w) // 2
-    right = max_dim - w - left
+    min_dim = min(h, w)
+    top = (h - min_dim) // 2
+    left = (w - min_dim) // 2
     
-    img_padded = cv2.copyMakeBorder(img_cv2, top, bottom, left, right, cv2.BORDER_REFLECT)
-    img_resized = cv2.resize(img_padded, IMAGE_SIZE, interpolation=cv2.INTER_CUBIC)
+    img_cropped = img_cv2[top:top+min_dim, left:left+min_dim]
+    img_resized = cv2.resize(img_cropped, IMAGE_SIZE, interpolation=cv2.INTER_CUBIC)
     
     # EfficientNet-B4 expected normalization
     from tensorflow.keras.applications.efficientnet import preprocess_input
@@ -233,22 +233,31 @@ async def analyze_lesion(
     # ── 7. Grad-CAM ────────────────────────────────────────────────────────
     heatmap_base64 = None
     try:
-        # Generate heatmap for the square padded/resized image
+        # Generate heatmap for the square center-cropped image
         heatmap_sq = generate_gradcam(model, img_normalized, pred_idx, meta_features)
         
-        # Resize heatmap up to the padded dimension
-        heatmap_padded = cv2.resize(heatmap_sq, (max_dim, max_dim), interpolation=cv2.INTER_CUBIC)
-        heatmap_padded = np.clip(heatmap_padded, 0.0, 1.0)
+        # Resize heatmap up to the center crop dimension
+        heatmap_cropped_resized = cv2.resize(heatmap_sq, (min_dim, min_dim), interpolation=cv2.INTER_CUBIC)
+        heatmap_cropped_resized = np.clip(heatmap_cropped_resized, 0.0, 1.0)
         
-        # Crop out the padding to match original image (h, w)
-        heatmap_cropped = heatmap_padded[top:top+h, left:left+w]
+        # Embed the square heatmap in the center of a full-size matrix to match original image dimensions
+        heatmap_full = np.zeros((h, w), dtype=np.float32)
+        heatmap_full[top:top+min_dim, left:left+min_dim] = heatmap_cropped_resized
         
         # Overlay perfectly on the original high-res image
-        overlay = overlay_heatmap(img_cv2 / 255.0, heatmap_cropped)
+        overlay_rgb = overlay_heatmap(img_cv2 / 255.0, heatmap_full)
+
+        # Downscale the final overlay if it's too large to prevent massive Base64 payloads
+        # while strictly preserving the original aspect ratio so the frontend slider aligns perfectly
+        max_overlay_dim = 800
+        if max_dim > max_overlay_dim:
+            scale_factor = max_overlay_dim / float(max_dim)
+            new_w = int(w * scale_factor)
+            new_h = int(h * scale_factor)
+            overlay_rgb = cv2.resize(overlay_rgb, (new_w, new_h), interpolation=cv2.INTER_AREA)
 
         # Encode overlay to base64 JPEG
-        overlay_rgb = cv2.cvtColor(overlay, cv2.COLOR_BGR2RGB) if overlay.shape[-1] == 3 else overlay
-        overlay_pil = Image.fromarray(overlay_rgb if overlay.dtype == np.uint8 else np.uint8(overlay * 255))
+        overlay_pil = Image.fromarray(overlay_rgb if overlay_rgb.dtype == np.uint8 else np.uint8(overlay_rgb * 255))
         buffered = io.BytesIO()
         overlay_pil.save(buffered, format="JPEG", quality=90)
         heatmap_base64 = "data:image/jpeg;base64," + base64.b64encode(buffered.getvalue()).decode("utf-8")
