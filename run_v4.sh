@@ -78,7 +78,13 @@ else
 fi
 
 echo -e "${GREEN}Starting Next.js frontend on http://localhost:3000 ...${NC}"
-(cd v4/frontend && npm run dev) &
+# Build for production if not already built to save memory in WSL
+if [ ! -d "v4/frontend/.next" ] || [ ! -d "v4/frontend/.next/server" ]; then
+    echo -e "${YELLOW}Building Next.js frontend (this saves memory and prevents crashes)...${NC}"
+    (cd v4/frontend && npm run build)
+fi
+
+(cd v4/frontend && npm run start) &
 FRONTEND_PID=$!
 
 echo ""
