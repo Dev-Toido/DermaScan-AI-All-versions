@@ -1,1 +1,0 @@
-0:MEL, 1:NV, 2:BCC, 3:AK, 4:BKL, 5:DF, 6:VASC, 7:SCC

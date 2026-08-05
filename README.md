@@ -1,50 +1,53 @@
-# DermaScan AI V3
+# DermaScan AI 🔬
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/deploy?repository=Dev-Toido/DermaScan-AI-V3)
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live%20Demo-14b8a6?logo=github)](https://Dev-Toido.github.io/DermaScan-AI-V3/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+> **An AI-powered dermatological diagnostic assistant, designed to detect and classify skin lesions with high precision.**
 
-DermaScan AI V3 is an advanced clinical decision support tool designed for the modern dermatologist. By fusing high-resolution dermoscopic imagery with biological metadata (age, sex, and anatomical site), DermaScan AI delivers a highly accurate, explainable, and safe prediction of skin lesion diagnosis.
+![DermaScan AI Model Accuracy](https://img.shields.io/badge/Model_Accuracy-67.75%25-brightgreen)
+![Build](https://img.shields.io/badge/build-passing-brightgreen)
+![Version](https://img.shields.io/badge/version-v4.0.0-blue)
 
-## 🌟 Key Features
+DermaScan AI analyzes dermatoscopic images alongside patient metadata (age, sex, anatomical site) to predict the likelihood of 8 distinct skin conditions, providing Grad-CAM visual explanations and clinically mapped recommendations.
 
-- **Multi-Modal Intelligence**: Combines visual features extracted via EfficientNetB4 with clinical metadata using a custom fusion network.
-- **Explainable AI (XAI)**: Generates Grad-CAM heatmaps to visually explain which regions of the image the model focused on.
-- **Clinical Safety Net**: Rejects low-confidence predictions (< 60%) to ensure it never "guesses" on challenging cases, strictly recommending professional consultation instead.
-- **Clinical Risk Mapping**: Outputs actionable risk categories (Low, Medium, High) mapped to standard ISIC classes.
-- **Offline & Private**: The entire application, including the UI and inference, runs locally, ensuring zero data leakage.
+## 📂 Project Organization
 
-## 🚀 Live Demo
+This repository contains multiple iterations of the DermaScan architecture:
 
-- **Marketing Website**: [Live Demo on GitHub Pages](https://Dev-Toido.github.io/DermaScan-AI-V3/)
-- **Streamlit App**: Click the "Deploy to Streamlit" badge above to instantly deploy your own instance!
+- **`v4/`**: The latest V4 architecture, featuring a modern **FastAPI** backend and a **Next.js** frontend.
+- **`v3/`**: The stable V3 architecture, powered by **Streamlit** and our proven Keras models. 
+- **`v2_archive/`**: Legacy codebase for historical reference.
+- **`docs/`**: GitHub Pages static website files.
 
-## ⚙️ Local Setup
+## 🚀 Quick Start (V3 Streamlit App)
 
-1. **Clone the Repository**:
+The V3 application is robust, tested, and ready for deployment.
+
+1. **Clone the repository and enter the v3 directory:**
    ```bash
-   git clone https://github.com/Dev-Toido/DermaScan-AI-V3.git
-   cd DermaScan-AI-V3
+   git clone https://github.com/your-username/DermaScan-AI-V3.git
+   cd DermaScan-AI-V3/v3
    ```
-2. **Install Dependencies**:
+
+2. **Install dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
-3. **Run the Streamlit App**:
+
+3. **Run the Streamlit interface:**
    ```bash
    streamlit run app.py
    ```
-4. **Run the Website Locally**:
-   ```bash
-   cd docs
-   python -m http.server 8080
-   # Open http://localhost:8080 in your browser
-   ```
 
-## 🧠 Model Architecture
-DermaScan AI V3 utilizes an EfficientNetB4 vision backbone integrated with a metadata embedding pipeline. This architecture mirrors real clinical reasoning by contextualizing the image with patient data before the final dense layers make a prediction across 8 diagnostic categories.
+## 📊 Model Performance
 
-## 📝 License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Our production model (`dermascan_v3_best.keras`) was rigorously evaluated on a balanced test set of 400 images:
 
-*Disclaimer: This is an academic prototype and is not intended for clinical use.*
+| Metric | Score |
+| :--- | :--- |
+| **Overall Accuracy** | 67.75% |
+| **Sensitivity (Melanoma)** | 48.00% |
+| **Sensitivity (BCC)** | 60.00% |
+| **Sensitivity (SCC)** | 56.00% |
+
+## 👥 Credits
+Developed for the upcoming AI Symposium. 
+*Disclaimer: This tool is for educational and research purposes only. It is not a substitute for professional medical advice, diagnosis, or treatment.*

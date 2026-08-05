@@ -40,6 +40,13 @@ if ! command -v python3 &> /dev/null && ! command -v python &> /dev/null; then
 fi
 PYTHON=$(command -v python3 || command -v python)
 
+# Load Node.js from our manual install if available
+export PATH="$SCRIPT_DIR/node-v20.12.2-linux-x64/bin:$PATH"
+
+# Load nvm if available
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
 # Check Node
 if ! command -v node &> /dev/null; then
     echo -e "${RED}Error: Node.js not found! Install it from https://nodejs.org/${NC}"
@@ -47,27 +54,32 @@ if ! command -v node &> /dev/null; then
 fi
 
 # Check if model exists
-if [ ! -f "dermascan_v3_best.keras" ]; then
+if [ ! -f "v4/backend/dermascan_v3_best.keras" ] && [ ! -f "dermascan_v3_best.keras" ]; then
     echo -e "${YELLOW}Warning: Model file 'dermascan_v3_best.keras' not found!${NC}"
     echo -e "${YELLOW}The backend will start but predictions will fail.${NC}"
 fi
 
 # Install frontend deps if needed
-if [ ! -d "v4_frontend/node_modules" ]; then
+if [ ! -d "v4/frontend/node_modules" ]; then
     echo -e "${YELLOW}Installing frontend dependencies...${NC}"
-    cd v4_frontend && npm install && cd ..
+    cd v4/frontend && npm install && cd ../..
     echo -e "${GREEN}✅ Frontend dependencies installed.${NC}"
 fi
 
 echo ""
 echo -e "${GREEN}Starting FastAPI backend on http://localhost:8000 ...${NC}"
-$PYTHON api_v4.py &
-BACKEND_PID=$!
+export PYTHONPATH="$SCRIPT_DIR/v3:$SCRIPT_DIR"
+if [ -f "v4/backend/api.py" ]; then
+    (cd v4/backend && $PYTHON api.py) &
+    BACKEND_PID=$!
+else
+    $PYTHON api_v4.py &
+    BACKEND_PID=$!
+fi
 
 echo -e "${GREEN}Starting Next.js frontend on http://localhost:3000 ...${NC}"
-cd v4_frontend && npm run dev &
+(cd v4/frontend && npm run dev) &
 FRONTEND_PID=$!
-cd ..
 
 echo ""
 echo -e "${CYAN}═══════════════════════════════════════════════════════${NC}"

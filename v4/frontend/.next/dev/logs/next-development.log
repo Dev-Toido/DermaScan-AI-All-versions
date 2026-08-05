@@ -1,0 +1,13 @@
+{"timestamp":"00:00:00.681","source":"Server","level":"LOG","message":""}
+{"timestamp":"00:00:01.161","source":"Browser","level":"ERROR","message":"Failed to fetch RSC payload for http://localhost:3000/#features. Falling back to browser navigation. {}"}
+{"timestamp":"00:00:01.161","source":"Browser","level":"ERROR","message":"Failed to fetch RSC payload for http://localhost:3000/#features. Falling back to browser navigation. {}"}
+{"timestamp":"00:00:01.161","source":"Browser","level":"ERROR","message":"Failed to fetch RSC payload for http://localhost:3000/#model. Falling back to browser navigation. {}"}
+{"timestamp":"00:00:01.161","source":"Browser","level":"ERROR","message":"Failed to fetch RSC payload for http://localhost:3000/#model. Falling back to browser navigation. {}"}
+{"timestamp":"00:00:01.161","source":"Browser","level":"ERROR","message":"Failed to fetch RSC payload for http://localhost:3000/#technology. Falling back to browser navigation. {}"}
+{"timestamp":"00:00:01.161","source":"Browser","level":"ERROR","message":"Failed to fetch RSC payload for http://localhost:3000/#technology. Falling back to browser navigation. {}"}
+{"timestamp":"00:00:01.161","source":"Browser","level":"ERROR","message":"Failed to fetch RSC payload for http://localhost:3000/#technology. Falling back to browser navigation. {}"}
+{"timestamp":"00:00:01.161","source":"Browser","level":"ERROR","message":"Failed to fetch RSC payload for http://localhost:3000/. Falling back to browser navigation. {}"}
+{"timestamp":"00:00:03.732","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:00:24.608","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:04:59.002","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:04:59.124","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
