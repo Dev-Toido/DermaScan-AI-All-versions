@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
-import { Upload, Activity, ShieldAlert, Clock, Scan, Sparkles, CheckCircle2, Menu, X, ArrowRight, Microchip, Layers, Brain, Search, Crosshair, Network, AlertTriangle, FileText, Shield, Info } from "lucide-react";
+import { Upload, Activity, ShieldAlert, Clock, Scan, Sparkles, CheckCircle2, Menu, X, ArrowRight, Microchip, Layers, Brain, Search, Crosshair, Network, AlertTriangle, FileText, Shield, Info, ChevronDown, GripVertical, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 // ── V3 Constants ────────────────────────────────────────────────────────────
@@ -59,11 +59,13 @@ export default function LandingAndDashboard() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   // Modal State
-  const [activeModal, setActiveModal] = useState<{ title: string; content: string } | null>(null);
+  const [activeModal, setActiveModal] = useState<{ title: string; content: React.ReactNode } | null>(null);
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
+  const [expandedFeature, setExpandedFeature] = useState<number | null>(null);
   
   // Custom synced cursor for Explainability
   const [heatmapCursor, setHeatmapCursor] = useState<{ x: number, y: number, show: boolean }>({ x: 0, y: 0, show: false });
+  const [sliderValue, setSliderValue] = useState(50);
 
   // Scroll animations
   const { scrollY } = useScroll();
@@ -645,26 +647,40 @@ export default function LandingAndDashboard() {
               </div>
               <h2 className="text-3xl font-bold font-display text-white">Designed around clinical trust</h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col gap-4">
               {[
-                { title: "Multi-modal analysis", desc: "Combines image features with patient metadata (age, sex, anatomical site) for more accurate predictions", modal: "Integrating patient demographic metadata (age, sex, anatomical site) with CNN features overcomes limitations of single-modality approaches, improving diagnostic specificities for complex lesions." },
-                { title: "Explainable predictions", desc: "Real Grad-CAM heatmaps highlight the exact pixel regions influencing the model's decision", modal: "Grad-CAM heatmaps verify deep learning models by explicitly mapping the network's attention to dermoscopic features like pigment networks or regression areas, essential for building clinical trust." },
-                { title: "Clinical safety net", desc: "Confidence thresholds, input validation, and 'consult dermatologist' fallback for uncertain cases", modal: "Specific logic and thresholds classify cases as 'uncertain,' triggering the 'consult dermatologist' flag for manual review, acting as a failsafe against model error." },
-                { title: "4-tier risk classification", desc: "Malignant, Pre-Malignant, Benign Nevi, Other Benign — with colour-coded recommendations", modal: "Comprehensive definition of the four risk categories, including benign types (Nevi, other benign), and malignant tiers (Pre-malignant, Malignant), with corresponding standard of care recommendations." },
-                { title: "Clinical PDF reports", desc: "Downloadable reports with patient data, diagnosis, probabilities, and Grad-CAM images", modal: "Reports include image previews, final classification, metadata rundown, Grad-CAM heatmaps, and differential diagnosis probabilities, formatted for medical records." },
+                { title: "Multi-modal analysis", hiddenText: "Combines visual scan data with patient details (age, sex, anatomical site) to dramatically boost diagnostic accuracy beyond standard image-only models." },
+                { title: "Explainable predictions", hiddenText: "Highlights the exact pixel regions that influenced the AI, making the model's decision transparent, verifiable, and easy to interpret." },
+                { title: "Clinical safety net", hiddenText: "Flags uncertain or low-confidence cases, automatically recommending a dermatologist review to ensure patient safety." },
+                { title: "4-tier risk classification", hiddenText: "Categorizes lesions into four clear risk levels (from Benign to Malignant) with actionable, color-coded medical recommendations." },
+                { title: "Clinical PDF reports", hiddenText: "Generates instant, downloadable medical reports containing the diagnosis, heatmaps, and patient data for easy clinical record-keeping." },
               ].map((feat, i) => (
                 <div 
                   key={i}
-                  onClick={() => setActiveModal({ title: feat.title, content: feat.modal })}
-                  className="group flex gap-4 p-5 rounded-xl border border-white/10 bg-white/5 hover:bg-[#00D4FF]/5 hover:border-[#00D4FF]/40 hover:shadow-[0_0_20px_rgba(0,212,255,0.15)] hover:scale-[1.02] transition-all duration-300 cursor-pointer"
+                  onClick={() => setExpandedFeature(expandedFeature === i ? null : i)}
+                  className="group flex flex-col p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-[#00D4FF]/5 hover:border-[#00D4FF]/40 hover:shadow-[0_0_20px_rgba(0,212,255,0.15)] transition-all duration-300 cursor-pointer overflow-hidden"
                 >
-                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-blue-600/20 to-[#00D4FF]/20 border border-[#00D4FF]/30 flex items-center justify-center text-[#00D4FF] group-hover:text-white group-hover:shadow-[0_0_15px_rgba(0,212,255,0.5)] transition-all">
-                    <CheckCircle2 size={20} />
+                  <div className="flex flex-row items-center justify-between w-full">
+                    <div className="flex items-center gap-4">
+                      <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-blue-600/20 to-[#00D4FF]/20 border border-[#00D4FF]/30 flex items-center justify-center text-[#00D4FF] group-hover:text-white group-hover:shadow-[0_0_15px_rgba(0,212,255,0.5)] transition-all">
+                        <CheckCircle2 size={20} />
+                      </div>
+                      <h4 className="text-white font-semibold text-lg group-hover:text-[#00D4FF] transition-colors">{feat.title}</h4>
+                    </div>
+                    <ChevronDown size={20} className={`text-gray-400 group-hover:text-[#00D4FF] transition-transform duration-300 ${expandedFeature === i ? 'rotate-180' : ''}`} />
                   </div>
-                  <div>
-                    <h4 className="text-white font-semibold mb-1 group-hover:text-[#00D4FF] transition-colors">{feat.title}</h4>
-                    <p className="text-gray-400 text-sm leading-relaxed group-hover:text-gray-300 transition-colors">{feat.desc}</p>
-                  </div>
+                  <AnimatePresence>
+                    {expandedFeature === i && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                      >
+                        <p className="text-gray-300 text-sm leading-relaxed mt-4 pl-14 pr-4 pb-2">{feat.hiddenText}</p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               ))}
             </div>
@@ -679,11 +695,43 @@ export default function LandingAndDashboard() {
             <div className="badge">Model Card — V3 Engine</div>
             <h3 className="text-white font-display">EfficientNet-B4, multi-modal</h3>
             <p>Compound-scaled convolutional backbone with metadata fusion, transfer-learned on ISIC dermoscopy data. 8 diagnostic categories with clinical risk mapping.</p>
-            <div className="model-bars">
-              <div className="mbar-row">Accuracy (full test)<div className="mbar-track"><div className="mbar-fill" style={{width: '65.7%'}}></div></div>65.7%</div>
-              <div className="mbar-row">Accuracy (balanced)<div className="mbar-track"><div className="mbar-fill" style={{width: '67.75%'}}></div></div>67.75%</div>
-              <div className="mbar-row">Classes<div className="mbar-track"><div className="mbar-fill" style={{width: '100%'}}></div></div>8</div>
-              <div className="mbar-row">Input modalities<div className="mbar-track"><div className="mbar-fill" style={{width: '100%'}}></div></div>Image + Metadata</div>
+            <div className="flex flex-col gap-6 mt-6">
+              {/* Percentage Metrics (Accuracy) */}
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-300 font-medium">Accuracy (full test)</span>
+                    <span className="text-[#00D4FF] font-mono font-semibold">65.7%</span>
+                  </div>
+                  <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden shadow-inner">
+                    <div className="h-full bg-gradient-to-r from-blue-600 to-[#00D4FF] rounded-full shadow-[0_0_10px_rgba(0,212,255,0.5)]" style={{ width: '65.7%' }} />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-300 font-medium">Accuracy (balanced)</span>
+                    <span className="text-[#00D4FF] font-mono font-semibold">67.75%</span>
+                  </div>
+                  <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden shadow-inner">
+                    <div className="h-full bg-gradient-to-r from-blue-600 to-[#00D4FF] rounded-full shadow-[0_0_10px_rgba(0,212,255,0.5)]" style={{ width: '67.75%' }} />
+                  </div>
+                </div>
+              </div>
+              
+              {/* Categorical / Integer Metrics */}
+              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
+                <div className="flex flex-col gap-1">
+                  <span className="text-gray-400 text-xs uppercase tracking-wider font-semibold">Diagnostic Classes</span>
+                  <span className="text-white font-mono text-lg font-bold">8</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="text-gray-400 text-xs uppercase tracking-wider font-semibold">Input Modalities</span>
+                  <div className="flex gap-2">
+                    <span className="bg-[#00D4FF]/10 text-[#00D4FF] border border-[#00D4FF]/20 px-2.5 py-0.5 rounded-md text-xs font-mono font-bold">Image</span>
+                    <span className="bg-[#00D4FF]/10 text-[#00D4FF] border border-[#00D4FF]/20 px-2.5 py-0.5 rounded-md text-xs font-mono font-bold">Metadata</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </motion.div>
         </div>
@@ -703,23 +751,40 @@ export default function LandingAndDashboard() {
         <div className="glass bg-[#111827]/50 border border-white/10 rounded-2xl shadow-2xl mb-24" style={{padding: '36px 28px'}}>
           <div className="pipeline" id="pipeline">
             {[
-              { icon: Scan, title: "Dermoscopy Image", sub: "INPUT · 224×224", modal: "Technical specifics of accepted input data: required dermoscopic image quality, supported formats, and pre-processing pipeline details (e.g., 224x224 input sizing, data augmentation strategies)." },
+              { 
+                icon: Scan, title: "Dermoscopy Image", sub: "INPUT · 224×224", 
+                modal: <><p className="mb-3 text-gray-300"><strong>Overview:</strong> The high-resolution, magnified starting picture of the skin lesion.</p><p className="text-gray-400"><strong>Technical Detail:</strong> Accepts raw image inputs, resizing them to 224x224 RGB tensors. The data pipeline applies standard normalization and center-cropping to prepare the visual matrix for the convolutional network.</p></>
+              },
               { arrow: true },
-              { icon: Brain, title: "EfficientNet-B4", sub: "CNN BACKBONE", modal: "Detailed overview of the CNN backbone: explaining the model's architectural depth, number of layers, and how it balances speed and accuracy for skin lesion classification compared to smaller models." },
+              { 
+                icon: Brain, title: "EfficientNet-B4", sub: "CNN BACKBONE", 
+                modal: <><p className="mb-3 text-gray-300"><strong>Overview:</strong> The primary AI "brain" that scans the image for dangerous visual patterns, like irregular borders or uneven colors.</p><p className="text-gray-400"><strong>Technical Detail:</strong> A compound-scaled Convolutional Neural Network (CNN) that acts as the primary feature extractor, systematically balancing network depth, width, and resolution for maximum accuracy without extreme compute costs.</p></>
+              },
               { arrow: true },
-              { icon: Network, title: "Metadata Fusion", sub: "AGE · SEX · SITE", modal: "A deep dive into the fusion architecture: description of how categorical and numerical patient data are vectorized and integrated into the deep learning pipeline, including layer specifications." },
+              { 
+                icon: Network, title: "Metadata Fusion", sub: "AGE · SEX · SITE", 
+                modal: <><p className="mb-3 text-gray-300"><strong>Overview:</strong> The step where the AI combines the picture with the patient’s age, sex, and where the mole is located on the body.</p><p className="text-gray-400"><strong>Technical Detail:</strong> A custom fusion layer that concatenates the flattened visual feature vectors from the CNN with the encoded categorical and numerical patient metadata, creating a unified context-aware tensor.</p></>
+              },
               { arrow: true },
-              { icon: Layers, title: "Dense Classifier", sub: "FULLY CONNECTED", modal: "Specifics of the final dense layer stack: detail on activation functions (e.g., ReLU), layer depth, and dropout strategies for managing model complexity." },
+              { 
+                icon: Layers, title: "Dense Classifier", sub: "FULLY CONNECTED", 
+                modal: <><p className="mb-3 text-gray-300"><strong>Overview:</strong> The decision-making center that weighs all the visual and patient evidence to make a final call.</p><p className="text-gray-400"><strong>Technical Detail:</strong> A fully connected neural network stack utilizing ReLU activation and strategic Dropout layers to prevent overfitting, mapping the fused high-dimensional data down to the final diagnostic outputs.</p></>
+              },
               { arrow: true },
-              { icon: Activity, title: "Softmax", sub: "PROBABILITY DIST.", modal: "Detailed explanation of the softmax layer's function: explaining how it converts raw model outputs (logits) into a probability distribution summing to 1 across all 8 classes." },
+              { 
+                icon: Activity, title: "Softmax", sub: "PROBABILITY DIST.", 
+                modal: <><p className="mb-3 text-gray-300"><strong>Overview:</strong> The calculator that converts the AI's raw thoughts into easy-to-read percentages (e.g., 85% Melanoma, 15% Benign).</p><p className="text-gray-400"><strong>Technical Detail:</strong> The final activation function that normalizes the raw output logits into a probability distribution that sums exactly to 1.0 (100%) across all possible classes.</p></>
+              },
               { arrow: true },
-              { icon: CheckCircle2, title: "8 Diagnostic Classes", sub: "+ CLINICAL MAPPING", modal: "A complete list and definition of the eight diagnostic categories output by the model, detailing the mapping from model logits to specific clinical conditions." }
+              { 
+                icon: CheckCircle2, title: "8 Diagnostic Classes", sub: "+ CLINICAL MAPPING", 
+                modal: <><p className="mb-3 text-gray-300"><strong>Overview:</strong> The final output placing the lesion into one of eight distinct medical categories, ranging from completely harmless to high-risk cancers.</p><p className="text-gray-400"><strong>Technical Detail:</strong> Maps the maximum probability to one of the ISIC dataset classes: Melanoma, Melanocytic Nevus, Basal Cell Carcinoma, Actinic Keratosis, Benign Keratosis, Dermatofibroma, Vascular Lesion, or Squamous Cell Carcinoma.</p></>
+              }
             ].map((step, idx) => {
               if (step.arrow) {
                 return (
-                  <div key={idx} className="pipe-arrow">
-                    <div className="flow" style={{ animationDelay: `${idx * 0.2}s` }}></div>
-                    <svg viewBox="0 0 34 12" fill="none"><path d="M0 6h30" stroke="#00D4FF" strokeWidth="1.4"/><path d="M25 1l6 5-6 5" stroke="#00D4FF" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <div key={idx} className="pipe-arrow relative flex items-center justify-center w-8 px-2 text-[#00D4FF]/30">
+                    <ChevronRight size={24} />
                   </div>
                 );
               }
@@ -730,9 +795,22 @@ export default function LandingAndDashboard() {
                   onClick={() => setActiveModal({ title: step.title!, content: step.modal! })}
                   className="pipe-step group cursor-pointer hover:scale-[1.05] transition-transform duration-200"
                 >
-                  <div className="icon-wrap group-hover:bg-[#00D4FF]/20 group-hover:border-[#00D4FF]/60 group-hover:shadow-[0_0_20px_rgba(0,212,255,0.5)] transition-all">
+                  <motion.div 
+                    className="icon-wrap group-hover:bg-[#00D4FF]/20 group-hover:border-[#00D4FF]/60 group-hover:shadow-[0_0_20px_rgba(0,212,255,0.5)] transition-all"
+                    animate={{
+                      boxShadow: ["0 0 0px transparent", "0 0 15px rgba(0,212,255,0.6)", "0 0 0px transparent"],
+                      borderColor: ["rgba(255,255,255,0.1)", "rgba(0,212,255,0.6)", "rgba(255,255,255,0.1)"],
+                      backgroundColor: ["rgba(17,24,39,0.5)", "rgba(0,212,255,0.15)", "rgba(17,24,39,0.5)"]
+                    }}
+                    transition={{
+                      duration: 2.5,
+                      repeat: Infinity,
+                      delay: (idx / 2) * 0.4,
+                      ease: "easeInOut"
+                    }}
+                  >
                     <Icon size={24} className="group-hover:animate-pulse group-hover:text-white" />
-                  </div>
+                  </motion.div>
                   <div className="t text-white group-hover:text-[#00D4FF] transition-colors">{step.title}</div>
                   <div className="s group-hover:text-gray-300 transition-colors">{step.sub}</div>
                 </div>
@@ -785,10 +863,10 @@ export default function LandingAndDashboard() {
         </div>
       </section>
 
-      {/* Section 5: Explainable AI — ✅ 3D Tilt */}
+      {/* Section 5: Explainable AI — Before/After Slider */}
       <section id="model" className="py-32 max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          <div>
+        <div className="flex flex-col gap-10">
+          <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-white/20 mb-8 shadow-xl">
               <Microchip size={16} className="text-[#00D4FF] animate-pulse" />
               <span className="text-xs font-bold text-white tracking-widest uppercase drop-shadow-md">Explainable AI</span>
@@ -806,65 +884,43 @@ export default function LandingAndDashboard() {
           </div>
 
           <motion.div 
-            className="relative"
-            style={{ rotateX: tilt3.rotateX, rotateY: tilt3.rotateY, transformPerspective: 1000 }}
-            onMouseMove={tilt3.handleMouseMove}
-            onMouseLeave={tilt3.handleMouseLeave}
+            className="relative w-full aspect-video md:aspect-[21/9] rounded-2xl overflow-hidden border border-white/30 bg-[#0d1928] shadow-[0_30px_60px_rgba(0,0,0,0.6)] group"
           >
-            <div className="absolute inset-0 bg-[#00D4FF]/20 rounded-3xl blur-[100px] -z-10 animate-pulse" />
-            <div className="premium-card p-3 flex gap-4 overflow-hidden border-t border-l border-white/30 bg-[#0d1928]/60 shadow-[0_30px_60px_rgba(0,0,0,0.6)]">
-              <div 
-                className="flex-1 rounded-xl overflow-hidden relative group border border-white/10 shadow-inner cursor-crosshair"
-                onMouseMove={(e) => {
-                  const rect = e.currentTarget.getBoundingClientRect();
-                  setHeatmapCursor({ x: e.clientX - rect.left, y: e.clientY - rect.top, show: true });
-                }}
-                onMouseLeave={() => setHeatmapCursor({ ...heatmapCursor, show: false })}
-                onClick={() => setActiveModal({ title: "Grad-CAM Analysis", content: "Regions of high activation (red/yellow) indicate where the model focused its attention. In this complex lesion, the network strongly correlates irregular pigment networks and asymmetrical structural patterns with a high risk of malignancy, specifically matching standard clinical indicators for melanoma." })}
-              >
-                <img src="/dermoscopy-demo.jpg" alt="Original" className="w-full h-auto object-cover aspect-video brightness-90 group-hover:scale-[1.03] transition-transform duration-700" />
-                <div className="absolute bottom-4 left-4 bg-black/60 backdrop-blur-md text-white text-[10px] px-3 py-1.5 rounded-md font-bold uppercase tracking-wider border border-white/20 shadow-lg pointer-events-none z-10">Original Dermoscopic Scan</div>
-                {heatmapCursor.show && (
-                  <div 
-                    className="absolute w-8 h-8 border-[1.5px] border-white/70 rounded-full pointer-events-none transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center shadow-[0_0_15px_rgba(0,212,255,0.4)] z-20"
-                    style={{ left: heatmapCursor.x, top: heatmapCursor.y }}
-                  >
-                    <div className="w-1.5 h-1.5 bg-[#00D4FF] rounded-full" />
-                  </div>
-                )}
-              </div>
-              <div 
-                className="flex-1 rounded-xl overflow-hidden relative group border border-white/10 shadow-inner cursor-crosshair"
-                onMouseMove={(e) => {
-                  const rect = e.currentTarget.getBoundingClientRect();
-                  setHeatmapCursor({ x: e.clientX - rect.left, y: e.clientY - rect.top, show: true });
-                }}
-                onMouseLeave={() => setHeatmapCursor({ ...heatmapCursor, show: false })}
-                onClick={() => setActiveModal({ title: "Grad-CAM Analysis", content: "Regions of high activation (red/yellow) indicate where the model focused its attention. In this complex lesion, the network strongly correlates irregular pigment networks and asymmetrical structural patterns with a high risk of malignancy, specifically matching standard clinical indicators for melanoma." })}
-              >
-                <img src="/dermoscopy-demo.jpg" alt="Heatmap" className="w-full h-auto object-cover aspect-video brightness-90 group-hover:scale-[1.03] transition-transform duration-700" />
-                {/* Simulated Heatmap Layer */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/70 via-green-500/80 to-red-600/90 mix-blend-screen opacity-90 group-hover:opacity-100 transition-opacity pointer-events-none" />
-                <div className="absolute bottom-4 left-4 bg-black/60 backdrop-blur-md text-white text-[10px] px-3 py-1.5 rounded-md font-bold uppercase tracking-wider border border-white/20 shadow-lg pointer-events-none z-10">Grad-CAM Overlay</div>
-                {heatmapCursor.show && (
-                  <>
-                    <div 
-                      className="absolute w-8 h-8 border-[1.5px] border-[#00D4FF] rounded-full pointer-events-none transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center shadow-[0_0_20px_rgba(0,212,255,1)] z-20"
-                      style={{ left: heatmapCursor.x, top: heatmapCursor.y }}
-                    >
-                      <div className="w-1.5 h-1.5 bg-white rounded-full" />
-                    </div>
-                    <div 
-                      className="absolute bg-[#050816]/95 backdrop-blur-md border border-[#00D4FF]/40 text-white text-[10px] px-3 py-2 rounded-lg shadow-xl pointer-events-none transform translate-x-5 translate-y-5 w-44 z-30"
-                      style={{ left: heatmapCursor.x, top: heatmapCursor.y }}
-                    >
-                      <span className="text-[#00D4FF] font-bold block mb-0.5"><Info size={10} className="inline mr-1" />Model Focus</span>
-                      Cursor over region with significant Grad-CAM activation.
-                    </div>
-                  </>
-                )}
+            {/* Bottom Layer: Original Image */}
+            <div className="absolute inset-0">
+              <img src="/dermoscopy-demo.jpg" alt="Original" className="w-full h-full object-cover pointer-events-none" />
+              <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md text-white text-[10px] px-3 py-1.5 rounded-md font-bold uppercase tracking-wider border border-white/20 shadow-lg pointer-events-none z-10">Original Scan</div>
+            </div>
+
+            {/* Top Layer: Heatmap */}
+            <div 
+              className="absolute inset-0 z-10 pointer-events-none"
+              style={{ clipPath: `inset(0 ${100 - sliderValue}% 0 0)` }}
+            >
+              <img src="/dermoscopy-demo.jpg" alt="Heatmap" className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/70 via-green-500/80 to-red-600/90 mix-blend-screen opacity-90" />
+              <div className="absolute top-4 right-4 bg-[#00D4FF]/20 text-[#00D4FF] backdrop-blur-md text-[10px] px-3 py-1.5 rounded-md font-bold uppercase tracking-wider border border-[#00D4FF]/40 shadow-[0_0_15px_rgba(0,212,255,0.3)] z-10">Grad-CAM Overlay</div>
+            </div>
+
+            {/* Slider Handle UI */}
+            <div 
+              className="absolute top-0 bottom-0 z-20 w-1 bg-white flex items-center justify-center pointer-events-none shadow-[0_0_10px_rgba(0,0,0,0.8)]"
+              style={{ left: `${sliderValue}%`, transform: 'translateX(-50%)' }}
+            >
+              <div className="w-10 h-10 bg-white text-[#0B1120] rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+                <GripVertical size={20} />
               </div>
             </div>
+
+            {/* Invisible Range Input */}
+            <input 
+              type="range"
+              min="0"
+              max="100"
+              value={sliderValue}
+              onChange={(e) => setSliderValue(Number(e.target.value))}
+              className="absolute inset-0 w-full h-full opacity-0 z-30 cursor-ew-resize m-0 p-0"
+            />
           </motion.div>
         </div>
       </section>
@@ -947,7 +1003,7 @@ export default function LandingAndDashboard() {
                 <X size={20} />
               </button>
               <h3 className="text-2xl font-bold font-display text-white mb-4 pr-8">{activeModal.title}</h3>
-              <p className="text-gray-300 leading-relaxed text-base">{activeModal.content}</p>
+              <div className="text-gray-300 leading-relaxed text-base">{activeModal.content}</div>
             </motion.div>
           </motion.div>
         )}

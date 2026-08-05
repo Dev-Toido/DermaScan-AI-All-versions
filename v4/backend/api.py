@@ -184,9 +184,21 @@ async def analyze_lesion(
 
     skin_lesion_ok = check_skin_lesion(img_cv2)
 
-    # ── 3. Preprocess image (exact V3 logic) ────────────────────────────────
-    img_resized = cv2.resize(img_cv2, IMAGE_SIZE)
-    img_normalized = img_resized.astype(np.float32)  # NO /255 normalization
+    # ── 3. Preprocess image (fixed) ─────────────────────────────────────────
+    # Fix Aspect Ratios: Use BORDER_REFLECT to prevent artificial edges
+    h, w = img_cv2.shape[:2]
+    max_dim = max(h, w)
+    top = (max_dim - h) // 2
+    bottom = max_dim - h - top
+    left = (max_dim - w) // 2
+    right = max_dim - w - left
+    
+    img_padded = cv2.copyMakeBorder(img_cv2, top, bottom, left, right, cv2.BORDER_REFLECT)
+    img_resized = cv2.resize(img_padded, IMAGE_SIZE, interpolation=cv2.INTER_CUBIC)
+    
+    # EfficientNet-B4 expected normalization
+    from tensorflow.keras.applications.efficientnet import preprocess_input
+    img_normalized = preprocess_input(img_resized.astype(np.float32))
 
     # ── 4. Build V2 metadata vector (10 features) ──────────────────────────
     age_scaled = (age - AGE_MEAN) / AGE_STD
@@ -221,8 +233,18 @@ async def analyze_lesion(
     # ── 7. Grad-CAM ────────────────────────────────────────────────────────
     heatmap_base64 = None
     try:
-        heatmap = generate_gradcam(model, img_normalized, pred_idx, meta_features)
-        overlay = overlay_heatmap(img_normalized / 255.0, heatmap)
+        # Generate heatmap for the square padded/resized image
+        heatmap_sq = generate_gradcam(model, img_normalized, pred_idx, meta_features)
+        
+        # Resize heatmap up to the padded dimension
+        heatmap_padded = cv2.resize(heatmap_sq, (max_dim, max_dim), interpolation=cv2.INTER_CUBIC)
+        heatmap_padded = np.clip(heatmap_padded, 0.0, 1.0)
+        
+        # Crop out the padding to match original image (h, w)
+        heatmap_cropped = heatmap_padded[top:top+h, left:left+w]
+        
+        # Overlay perfectly on the original high-res image
+        overlay = overlay_heatmap(img_cv2 / 255.0, heatmap_cropped)
 
         # Encode overlay to base64 JPEG
         overlay_rgb = cv2.cvtColor(overlay, cv2.COLOR_BGR2RGB) if overlay.shape[-1] == 3 else overlay
