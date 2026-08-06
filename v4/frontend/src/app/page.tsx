@@ -273,10 +273,31 @@ export default function LandingAndDashboard() {
             </button>
           </div>
 
-          <button className="md:hidden text-white" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-            {mobileMenuOpen ? <X /> : <Menu />}
+          <button className="md:hidden text-white p-2" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
+
+        {/* Mobile Menu Dropdown */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden bg-[#050816]/95 backdrop-blur-2xl border-b border-white/10 overflow-hidden"
+            >
+              <div className="flex flex-col px-6 py-4 space-y-4">
+                <Link href="#technology" onClick={() => setMobileMenuOpen(false)} className="text-gray-300 hover:text-white font-medium py-2">Technology</Link>
+                <Link href="#model" onClick={() => setMobileMenuOpen(false)} className="text-gray-300 hover:text-white font-medium py-2">Model</Link>
+                <Link href="#features" onClick={() => setMobileMenuOpen(false)} className="text-gray-300 hover:text-white font-medium py-2">Features</Link>
+                <button onClick={() => { setMobileMenuOpen(false); scrollToScanner(); }} className="clinical-button-primary mt-2 w-full py-3">
+                  Launch Scanner
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* Section 1: Hero */}
@@ -472,11 +493,11 @@ export default function LandingAndDashboard() {
 
             {/* Right Panel: Viewer (8 Columns) — ✅ Glassmorphism & Heatmap Overlay */}
             <div className="lg:col-span-8 flex flex-col gap-6 relative">
-              <div className="premium-card p-3 h-[600px] flex relative overflow-hidden bg-[#050816]/60 border-t border-l border-white/20 shadow-2xl">
+              <div className="premium-card p-3 h-auto min-h-[600px] flex relative overflow-hidden bg-[#050816]/60 border-t border-l border-white/20 shadow-2xl">
                 {previewUrl ? (
-                  <div className="w-full h-full flex gap-4 transition-all duration-200 ease-in-out">
+                  <div className="w-full h-full flex flex-col md:flex-row gap-4 transition-all duration-200 ease-in-out">
                     {/* Visual Canvas (Left) */}
-                    <div className={`relative rounded-xl overflow-hidden flex items-center justify-center bg-black/60 shadow-inner transition-all duration-200 ease-in-out ${result && !result.error && !isScanning ? 'flex-1' : 'w-full h-full'}`}>
+                    <div className={`relative rounded-xl overflow-hidden flex items-center justify-center bg-black/60 shadow-inner transition-all duration-200 ease-in-out min-h-[300px] ${result && !result.error && !isScanning ? 'flex-1' : 'w-full h-full'}`}>
                       <img src={previewUrl} alt="Preview" className="max-w-full max-h-full object-contain" />
                       
                       {/* ✅ Animated AI Scan Line */}
@@ -517,11 +538,11 @@ export default function LandingAndDashboard() {
                     <AnimatePresence>
                       {result && !result.error && !isScanning && (
                         <motion.div 
-                          initial={{ opacity: 0, x: 20, width: 0 }}
-                          animate={{ opacity: 1, x: 0, width: 380 }}
-                          exit={{ opacity: 0, width: 0 }}
+                          initial={{ opacity: 0, x: 20, width: "0%" }}
+                          animate={{ opacity: 1, x: 0, width: "100%" }}
+                          exit={{ opacity: 0, width: "0%" }}
                           transition={{ type: "spring", bounce: 0.4 }}
-                          className="h-full overflow-y-auto bg-[#050816]/90 backdrop-blur-3xl rounded-2xl p-6 border border-white/20 shadow-[0_30px_60px_rgba(0,0,0,0.8)] shrink-0"
+                          className="md:max-w-[380px] h-full overflow-y-auto bg-[#050816]/90 backdrop-blur-3xl rounded-2xl p-6 border border-white/20 shadow-[0_30px_60px_rgba(0,0,0,0.8)] shrink-0"
                         >
                           {/* Skin Lesion Warning */}
                           {result.skin_lesion_warning && (

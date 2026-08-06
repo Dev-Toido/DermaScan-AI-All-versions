@@ -1,6 +1,33 @@
 // DermaScan AI V3 - Main JavaScript
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Mobile Menu Toggle
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileIcon = document.getElementById('mobile-menu-icon');
+    const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+
+    if (mobileBtn && mobileMenu && mobileIcon) {
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileIcon.classList.remove('ph-x');
+                mobileIcon.classList.add('ph-list');
+            } else {
+                mobileIcon.classList.remove('ph-list');
+                mobileIcon.classList.add('ph-x');
+            }
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                mobileIcon.classList.remove('ph-x');
+                mobileIcon.classList.add('ph-list');
+            });
+        });
+    }
+
     // Initialize AOS Animation Library
     AOS.init({
         once: true,

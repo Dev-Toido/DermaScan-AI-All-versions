@@ -55,9 +55,24 @@
                     <a href="#features" class="text-slate-300 hover:text-white transition-colors">Features</a>
                     <a href="#demo" class="text-slate-300 hover:text-white transition-colors">Live Demo</a>
                 </div>
-                <div>
-                    <a href="#demo" class="btn-primary px-6 py-2 rounded-full font-medium shadow-lg shadow-accent/20">Try Demo</a>
+                <div class="flex items-center gap-4">
+                    <a href="#demo" class="btn-primary px-6 py-2 rounded-full font-medium shadow-lg shadow-accent/20 hidden md:inline-block">Try Demo</a>
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-btn" class="md:hidden text-slate-300 hover:text-white focus:outline-none p-2">
+                        <i id="mobile-menu-icon" class="ph ph-list text-3xl"></i>
+                    </button>
                 </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-medical-800 border-b border-slate-700/50 absolute w-full top-20 left-0">
+            <div class="px-4 pt-2 pb-6 space-y-2 shadow-2xl flex flex-col">
+                <a href="#problem" class="mobile-nav-link block px-3 py-3 text-base font-medium text-slate-300 hover:text-white hover:bg-slate-700 rounded-md">The Challenge</a>
+                <a href="#solution" class="mobile-nav-link block px-3 py-3 text-base font-medium text-slate-300 hover:text-white hover:bg-slate-700 rounded-md">How it Works</a>
+                <a href="#features" class="mobile-nav-link block px-3 py-3 text-base font-medium text-slate-300 hover:text-white hover:bg-slate-700 rounded-md">Features</a>
+                <a href="#demo" class="mobile-nav-link block px-3 py-3 text-base font-medium text-slate-300 hover:text-white hover:bg-slate-700 rounded-md">Live Demo</a>
+                <a href="#demo" class="mobile-nav-link block mt-4 text-center btn-primary px-6 py-4 rounded-full font-bold">Try Demo</a>
             </div>
         </div>
     </nav>
