@@ -58,7 +58,7 @@ The V3 application is robust, tested, and ready for rapid local deployment.
 ## 🌐 Live Deployments
 - **V4 App (Latest Architecture)**: [derma-scan-ai-all-versions.vercel.app](https://derma-scan-ai-all-versions.vercel.app/)
 - **V3 Streamlit App**: [dermascan-ai-v3.streamlit.app](https://dermascan-ai-v3.streamlit.app/)
-- **V3**: [dev-toido.github.io/DermaScan-AI-All-versions](https://dev-toido.github.io/DermaScan-AI-All-versions/)
+- **Marketing Website**: [dev-toido.github.io/DermaScan-AI-All-versions](https://dev-toido.github.io/DermaScan-AI-All-versions/)
 - **V4 Backend API**: Hosted on Render
 
 *(See `docs/project/DEPLOYMENT.md` for detailed instructions)*
