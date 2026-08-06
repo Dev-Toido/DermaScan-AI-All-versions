@@ -55,10 +55,12 @@ The V3 application is robust, tested, and ready for rapid local deployment.
    streamlit run app.py
    ```
 
-## 🌐 Deployment
-- **Marketing Website**: Can be hosted via GitHub Pages directly from the `docs/` folder.
-- **V3 Streamlit App**: Can be deployed to Streamlit Community Cloud pointing to `app.py`.
-- **V4 App**: Recommended to deploy the Next.js frontend to Vercel and the FastAPI backend to a scalable cloud provider (e.g., Render, AWS, GCP).
+## 🌐 Live Deployments
+- **V4 App (Latest Architecture)**: [derma-scan-ai-all-versions.vercel.app](https://derma-scan-ai-all-versions.vercel.app/)
+- **V3 Streamlit App**: [dermascan-ai-v3.streamlit.app](https://dermascan-ai-v3.streamlit.app/)
+- **Marketing Website**: *(Deployment pending via GitHub Pages)*
+- **V4 Backend API**: Hosted on Render
+
 *(See `docs/project/DEPLOYMENT.md` for detailed instructions)*
 
 ## ⚠️ Disclaimer
