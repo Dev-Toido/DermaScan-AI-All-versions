@@ -3,7 +3,7 @@
 fastapi
 uvicorn
 python-multipart
-tensorflow==2.21.0
+tensorflow-cpu==2.21.0
 opencv-python-headless==4.9.0.80
 Pillow==10.2.0
 pandas==2.2.1
