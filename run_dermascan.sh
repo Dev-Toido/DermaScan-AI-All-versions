@@ -16,7 +16,7 @@ fi
 
 # Run the Streamlit application
 echo "Starting DermaScan AI V3..."
-python -m streamlit run app_v3.py
+cd v3 && python -m streamlit run app_v3.py && cd ..
 
 # Keep terminal open if it fails
 if [ $? -ne 0 ]; then

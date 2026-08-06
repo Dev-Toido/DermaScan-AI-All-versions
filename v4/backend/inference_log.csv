@@ -20,3 +20,4 @@ timestamp,image_hash,age,sex,site,predicted_class,confidence,risk_group
 2026-08-05T23:09:50.227049+00:00,755896e5f1593d8b705f3c54c9b2632c7ba894eb89c36281f809564fc31d3d85,50,Female,Anterior torso,BKL,0.52425217628479,Uncertain
 2026-08-05T23:21:23.685691+00:00,f5639d4c52597d0bf5cfa7db3b0f1ecadf9dde42744919eaa7a7679f953fb8e7,50,Female,Anterior torso,NV,0.5017910003662109,Uncertain
 2026-08-05T23:21:32.304842+00:00,015c14af831773d16b5f3ce87aa1ddbc6be7efd0d856bd2bac2c7a4fd3f5309a,50,Female,Anterior torso,NV,0.702779233455658,Benign Nevi
+2026-08-06T00:16:03.500969+00:00,7bf70ba20e56bcdc71089d464ab6bedbf74d7a00e071fd25c30641ec9aa5ed5f,50,Female,Anterior torso,VASC,0.6035634875297546,Other Benign
