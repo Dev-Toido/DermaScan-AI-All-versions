@@ -43,3 +43,12 @@ This document serves as a persistent, append-only log to track project phases, a
 
 ---
 *End of Log*
+
+### [2026-08-21] Phase 7: Agentic Security & Performance Review
+- **Action:** Simulated 3 expert agents (Security, Performance, DevOps) to review the legacy V4 codebase for flaws before building V5.
+- **Findings:**
+  - **Security:** Identified a Global State Race Condition in pi.py that caused clinical PDF reports to cross-contaminate between concurrent users.
+  - **Performance:** Identified that TensorFlow model.predict() was synchronously blocking the async FastAPI event loop.
+  - **DevOps:** Identified that V4 ran on a single Uvicorn worker, bottlenecking multi-core CPUs.
+- **Decisions Made:** Scheduled fixes for Phase 4 of V5 (Stateless UUIDs for PDFs, ThreadPools for inference, Gunicorn for multi-worker scaling). Added an automated GitHub Action CI/CD pipeline for documentation.
+- **Output:** Created uto_docs.yml and updated 	ask.md.

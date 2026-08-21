@@ -11,3 +11,9 @@ node_modules/
 node-v20.12.2-linux-x64/
 v4/frontend/.next/
 v4_frontend/.next/
+
+# Exclude massive V5 dataset folders
+archive/
+v5/data_preparation/train/
+v5/data_preparation/val/
+v5/data_preparation/test/
