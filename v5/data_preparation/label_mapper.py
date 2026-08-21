@@ -55,4 +55,6 @@ def map_labels_to_etiology_families(unified_csv_path, output_csv_path):
     print(f"Etiology mapping complete. Saved to {output_csv_path}")
 
 if __name__ == "__main__":
-    map_labels_to_etiology_families("../train/train_metadata.csv", "../train/train_mapped.csv")
+    map_labels_to_etiology_families("train_metadata.csv", "train_mapped.csv")
+    map_labels_to_etiology_families("val_metadata.csv", "val_mapped.csv")
+    map_labels_to_etiology_families("test_metadata.csv", "test_mapped.csv")
