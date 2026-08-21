@@ -6,6 +6,7 @@ on:
 
 jobs:
   sync-to-hub:
+    if: ${{ secrets.HF_TOKEN != '' && secrets.HF_USERNAME != '' && secrets.HF_SPACE_NAME != '' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
