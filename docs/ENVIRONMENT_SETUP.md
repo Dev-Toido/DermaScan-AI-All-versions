@@ -38,22 +38,25 @@ Follow these steps to build a fresh, isolated Linux environment inside Windows:
    cd DermaScan-AI-All-versions
    ```
 
-7. **Create an Isolated Python Environment (venv)**
-   Creating a virtual environment ensures your AI package versions (like TensorFlow) do not conflict with system-level Linux packages.
+7. **Create an Isolated Python Environment (Miniconda)**
+   Creating a virtual environment ensures your AI package versions (like TensorFlow) do not conflict with system-level Linux packages. Because Ubuntu 24.04+ defaults to Python 3.12+, which is incompatible with TensorFlow 2.15, you MUST use Miniconda to install Python 3.11.
    
-   First, install Python's environment builder and package manager:
+   First, install Miniconda:
    ```bash
-   sudo apt update && sudo apt install -y python3-venv python3-pip
+   mkdir -p ~/miniconda3
+   wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
+   bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
+   ~/miniconda3/bin/conda init bash
    ```
-   Build a virtual environment named `venv`:
+   **Restart your terminal**, then build the Python 3.11 environment named `dermascan`:
    ```bash
-   python3 -m venv venv
+   conda create -n dermascan python=3.11 -y
    ```
    Activate the environment:
    ```bash
-   source venv/bin/activate
+   conda activate dermascan
    ```
-   *(Your terminal prompt will now display `(venv)` at the very beginning, showing it is active).*
+   *(Your terminal prompt will now display `(dermascan)` at the very beginning).*
 
 8. **Install Project Dependencies (Crucial for AI)**
    With the environment activated, install the required AI libraries:
@@ -86,13 +89,13 @@ Launch Google Antigravity IDE on your Windows desktop.
 Click **File → Open Folder...** from the top menu bar (or use `Ctrl + K` then `Ctrl + O`). Paste the network path (`\\wsl.localhost\Ubuntu\...`) you copied from Step 1 into the folder address bar and press Enter. Click **Select Folder**. Your cloned GitHub repository files will load into the left sidebar.
 
 **Step 3: Connect Antigravity's Terminal to WSL**
-Because your Python virtual environment (`venv`) and AI tools are installed on the Linux layer, you need to route Antigravity's integrated terminal panel to use WSL instead of Windows PowerShell. 
+Because your Python virtual environment (`dermascan`) and AI tools are installed on the Linux layer, you need to route Antigravity's integrated terminal panel to use WSL instead of Windows PowerShell. 
 1. Go to **Terminal → New Terminal** in Antigravity. 
 2. If it drops you into a Windows prompt, look at the top-right corner of the terminal sub-pane and click the drop-down arrow next to the `+` icon. 
 3. Select **Ubuntu (WSL)** to change the shell environment. 
 4. Activate your environment inside this Antigravity terminal pane:
    ```bash
-   source venv/bin/activate
+   conda activate dermascan
    ```
 
 ---

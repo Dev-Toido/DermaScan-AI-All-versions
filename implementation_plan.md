@@ -1,66 +1,39 @@
-# Goal: Clean Up and Restructure Project Root
+# 🏎️ Epoch & GPU Optimization Plan
 
-The project root currently contains a mix of V3, V4, and V5 files, along with various scripts from old deployments. To make the project clean, focused on V5, and to preserve our historical progress files, we will restructure the directory.
+To train on your RTX 4050 efficiently and correctly, we need to restructure `train_loop.py` into a production-grade training pipeline and fix the CUDA/GPU bindings.
 
----
+## 🚨 Open Questions for User
+No questions right now, but please review the "What happens after" section below to understand the pipeline flow!
 
-> [!IMPORTANT]
-> ## User Review Required
-> Please review the proposed folder structure below. This is a non-destructive cleanup (no files will be permanently deleted; old files will be safely archived into `legacy_history/`).
-> **If you approve this plan, click Proceed and I will execute the moves.**
+## 🛠️ Proposed Changes
 
----
+### 1. Fix the GPU Binding (CUDA)
+TensorFlow failed to detect your GPU because the base `tensorflow` package doesn't always bundle the NVIDIA drivers correctly for WSL.
+- **Action:** I will update `requirements.txt` to use `tensorflow[and-cuda]==2.15.0`. This tells `pip` to automatically download the exact NVIDIA cuDNN and CUDA toolkit wheels required for your GPU.
 
-## 1. Proposed File Movements
+### 2. Implement the "Best Approach" Epoch Strategy
+Instead of a messy manual `for` loop, the best approach in TensorFlow is to **override the internal `train_step`** of the model so we can use Keras's built-in `model.fit()` while keeping Gradient Accumulation. This unlocks all the powerful Keras callbacks.
 
-We will create a new folder called `legacy_history/` to safely preserve all previous iterations of DermaScan without cluttering the root.
+#### [NEW] `v5/training/custom_model.py`
+- We will create a `DualHeadModel` class that inherits from `tf.keras.Model`.
+- It will handle the Gradient Accumulation internally (waiting 4 steps before applying weights).
 
-### Files/Folders to Move to `legacy_history/`:
-- `v2_archive/` (Old V2 code)
-- `v3/` (Old Streamlit code)
-- `v4/` (Old FastAPI/NextJS code)
-- `Friend's repo/` (Old unused repo)
-- `.streamlit/` (V3 specific configs)
-- `run_dermascan.sh`, `run_v4.sh`, `stop_dermascan.sh` (Old run scripts)
-- `DermaScan_V3.desktop` (Old desktop shortcut)
-- `Dockerfile`, `render.yaml` (Old deployment configs)
-- `V4_Detailed_Report.md` (Old V4 report)
-
-### Progress Files to Surface to Root:
-To ensure the progress history is "outside and accessible" as requested, I will explicitly copy the AI-generated planning files from the hidden IDE folder into the actual project root so you can always see them in your file explorer:
-- `implementation_plan.md` (The V5 architecture plan)
-- `task.md` (The active V5 execution checklist)
-
-*Note: `progress_log.md` is already safely in the root.*
+#### [MODIFY] `v5/training/train_loop.py`
+We will implement the gold-standard Keras Callbacks for the `model.fit()` loop:
+- **ModelCheckpoint:** Automatically saves the best model weights to `v5/training/checkpoints/best_model.h5` every time the validation loss improves.
+- **EarlyStopping:** Stops training if the model stops improving for 5 epochs (prevents overfitting).
+- **ReduceLROnPlateau:** Automatically lowers the learning rate if the model gets stuck.
+- **TensorBoard:** Logs all metrics so you can visualize the training graph in your browser.
 
 ---
 
-## 2. The New Clean Project Structure
+## 🔮 What Happens After the Epochs?
 
-After the restructuring, your project root will look incredibly clean and focused:
+Once you run the command and the epochs finish (which could take 4-12 hours depending on the Early Stopping), here is exactly what happens next:
 
-```text
-DermaScan-AI-All-versions/
-├── .github/                 # Active CI/CD Workflows
-├── archive/                 # Destination for your massive datasets
-├── demo_images/             # Sample testing data
-├── docs/                    # Active documentation
-├── legacy_history/          # ALL V2, V3, and V4 history preserved safely inside here
-├── logs/                    # Active system logs
-├── scripts/                 # Active utilities
-├── tests/                   # Active testing suite
-├── v5/                      # ACTIVE WORKSPACE: The new V5 Clinical Architecture
-├── .gitignore               
-├── implementation_plan.md   # Progress File: V5 Architecture Plan
-├── LICENSE                  
-├── progress_log.md          # Progress File: Historical Log
-├── README.md                
-├── requirements.txt         # V5 Dependencies (Moved from v5/ to root for standard access)
-└── task.md                  # Progress File: V5 Task Checklist
-```
+1. **The best weights are saved:** `best_model.h5` will be resting in your checkpoints folder.
+2. **Phase 4 (Validation & Metrics):** We will load that `best_model.h5` and run it against the 15% unseen Test Set. We will generate Confusion Matrices, ROC curves, and calculate exactly how safe the Etiology Safety Net is.
+3. **Phase 5 (FastAPI Integration):** We wrap the model in a Python FastAPI backend.
+4. **Phase 6 (Next.js UI):** We build a beautiful web interface to upload images and see the dual-head predictions.
 
-## 3. Execution Plan
-1. Create the `legacy_history/` folder.
-2. Move all identified legacy files and folders into it.
-3. Copy `implementation_plan.md` and `task.md` from the AI brain into the root.
-4. Move `v5/requirements.txt` to the root (Standard Python convention).
+If you approve this plan, I will write the code, fix the GPU dependency, and hand you the final command to run in your terminal!

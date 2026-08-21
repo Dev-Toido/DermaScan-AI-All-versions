@@ -2,7 +2,7 @@ import tensorflow as tf
 from tensorflow.keras import layers, Model
 from tensorflow.keras.applications import EfficientNetB4
 
-def create_v5_dual_head_model(input_shape=(380, 380, 3), num_ddx_classes=8, num_etiology_classes=4):
+def create_v5_dual_head_model(input_shape=(380, 380, 3), num_ddx_classes=10, num_etiology_classes=4):
     """
     Creates the V5 Dual-Head Architecture for DermaScan AI.
     
@@ -42,7 +42,7 @@ def create_v5_dual_head_model(input_shape=(380, 380, 3), num_ddx_classes=8, num_
     shared = layers.Dropout(0.3)(shared)
     
     # ---------------------------------------------------------
-    # HEAD 1: Clinical DDx Head (8 specific disease classes)
+    # HEAD 1: Clinical DDx Head (10 specific disease classes)
     # ---------------------------------------------------------
     ddx_out = layers.Dense(
         num_ddx_classes, 

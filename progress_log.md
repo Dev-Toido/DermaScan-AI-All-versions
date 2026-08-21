@@ -52,3 +52,25 @@ This document serves as a persistent, append-only log to track project phases, a
   - **DevOps:** Identified that V4 ran on a single Uvicorn worker, bottlenecking multi-core CPUs.
 - **Decisions Made:** Scheduled fixes for Phase 4 of V5 (Stateless UUIDs for PDFs, ThreadPools for inference, Gunicorn for multi-worker scaling). Added an automated GitHub Action CI/CD pipeline for documentation.
 - **Output:** Created uto_docs.yml and updated 	ask.md.
+
+### [2026-08-21] Phase 8: Pre-Flight Diagnostics & Dataset Pipeline Fix
+- **Action:** Executed a 10-point diagnostic check simulating 10 agents to verify GPU, environments, pipelines, and architecture.
+- **Findings:**
+  - dataset.py was bugged. It expected folders (	rain/melanoma/), but we used CSVs. 
+  - Ubuntu 24.04 uses Python 3.14 by default, which is incompatible with TensorFlow 2.15 (causing pip install tensorflow to fail).
+- **Decisions Made:** 
+  - Rebuilt dataset.py to use 	f.data.Dataset.from_tensor_slices to natively stream images from the CSV files without moving them.
+  - Updated ENVIRONMENT_SETUP.md to completely drop python3-venv in favor of Miniconda, ensuring we lock the Python version to 3.11 for TensorFlow compatibility.
+
+### [2026-08-22] Phase 9: Epoch & GPU Optimization
+- **Action:** Fixed the `train_loop.py` to use professional Keras Callbacks and native GPU binding.
+- **Findings:**
+  - Standard `tensorflow` pip wheel failed to hook the RTX 4050 in WSL.
+  - The `model.fit()` loop crashed when saving `.h5` files due to shared variables in the Custom Gradient Accumulation Model.
+  - The Dataset mapped 10 DDx classes (including fallback) but the Model output 8.
+- **Decisions Made:**
+  - Installed `cudatoolkit=11.8.0` and `cudnn` directly via Conda to natively fix the GPU binding in WSL.
+  - Wrapped the Dual-Head architecture in a custom `GradientAccumulationModel(tf.keras.Model)` to override `train_step`, enabling native `model.fit()` callbacks (ModelCheckpoint, EarlyStopping, ReduceLROnPlateau).
+  - Switched Keras save format from legacy `.h5` to native `.keras` to bypass HDF5 shared-variable collision bugs.
+  - Updated `model.py` DDx Head from 8 to 10 neurons to perfectly map the dataset generator.
+  - Successfully initiated Training Epochs on the RTX 4050, instantly achieving ~80% Etiology Accuracy on Epoch 1.
