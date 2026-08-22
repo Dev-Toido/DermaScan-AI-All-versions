@@ -38,39 +38,45 @@ This document serves as a persistent, append-only log to track project phases, a
 
 ### [2026-08-21] Phase 6: Clinical Output Refinement
 - **Action:** User requested a paradigm shift from a Computer Science output (Binary Cancer vs Non-Cancer) to a Clinical Dermatologist output.
-- **Decisions Made:** Swapped the Binary OOD head for an **Etiology Category Head** (Melanocytic, Keratinocytic, Inflammatory, Vascular). The primary head will now output a **Top 3 Differential Diagnosis (DDx)**. A post-processing script will convert probabilities into a **Malignancy Risk Index** to provide actionable clinical recommendations.
+- **Decisions Made:** Swapped the Binary OOD head for an **Etiology Category Head** (Melanocytic, Keratinocytic, Inflammatory, Vascular). The primary head will output a **Top 3 Differential Diagnosis (DDx)**. A post-processing script will convert probabilities into a **Malignancy Risk Index** to provide actionable clinical recommendations.
 - **Output:** Finalized `implementation_plan.md` for user approval.
 
 ---
-*End of Log*
 
 ### [2026-08-21] Phase 7: Agentic Security & Performance Review
 - **Action:** Simulated 3 expert agents (Security, Performance, DevOps) to review the legacy V4 codebase for flaws before building V5.
 - **Findings:**
-  - **Security:** Identified a Global State Race Condition in pi.py that caused clinical PDF reports to cross-contaminate between concurrent users.
+  - **Security:** Identified a Global State Race Condition in api.py that caused clinical PDF reports to cross-contaminate between concurrent users.
   - **Performance:** Identified that TensorFlow model.predict() was synchronously blocking the async FastAPI event loop.
   - **DevOps:** Identified that V4 ran on a single Uvicorn worker, bottlenecking multi-core CPUs.
 - **Decisions Made:** Scheduled fixes for Phase 4 of V5 (Stateless UUIDs for PDFs, ThreadPools for inference, Gunicorn for multi-worker scaling). Added an automated GitHub Action CI/CD pipeline for documentation.
-- **Output:** Created uto_docs.yml and updated 	ask.md.
+- **Output:** Created auto_docs.yml and updated task.md.
 
 ### [2026-08-21] Phase 8: Pre-Flight Diagnostics & Dataset Pipeline Fix
 - **Action:** Executed a 10-point diagnostic check simulating 10 agents to verify GPU, environments, pipelines, and architecture.
 - **Findings:**
-  - dataset.py was bugged. It expected folders (	rain/melanoma/), but we used CSVs. 
-  - Ubuntu 24.04 uses Python 3.14 by default, which is incompatible with TensorFlow 2.15 (causing pip install tensorflow to fail).
+  - dataset.py was bugged. It expected folders, but we used CSVs. 
+  - Ubuntu 24.04 uses Python 3.14 by default, which is incompatible with TensorFlow 2.15.
 - **Decisions Made:** 
-  - Rebuilt dataset.py to use 	f.data.Dataset.from_tensor_slices to natively stream images from the CSV files without moving them.
-  - Updated ENVIRONMENT_SETUP.md to completely drop python3-venv in favor of Miniconda, ensuring we lock the Python version to 3.11 for TensorFlow compatibility.
+  - Rebuilt dataset.py to use tf.data.Dataset.from_tensor_slices to natively stream images from the CSV files without moving them.
+  - Updated ENVIRONMENT_SETUP.md to completely drop python3-venv in favor of Miniconda, locking Python version to 3.11.
 
 ### [2026-08-22] Phase 9: Epoch & GPU Optimization
 - **Action:** Fixed the `train_loop.py` to use professional Keras Callbacks and native GPU binding.
 - **Findings:**
   - Standard `tensorflow` pip wheel failed to hook the RTX 4050 in WSL.
-  - The `model.fit()` loop crashed when saving `.h5` files due to shared variables in the Custom Gradient Accumulation Model.
-  - The Dataset mapped 10 DDx classes (including fallback) but the Model output 8.
+  - The Dataset mapped 10 DDx classes but the Model output 8.
 - **Decisions Made:**
-  - Installed `cudatoolkit=11.8.0` and `cudnn` directly via Conda to natively fix the GPU binding in WSL.
-  - Wrapped the Dual-Head architecture in a custom `GradientAccumulationModel(tf.keras.Model)` to override `train_step`, enabling native `model.fit()` callbacks (ModelCheckpoint, EarlyStopping, ReduceLROnPlateau).
+  - Installed `cudatoolkit=11.8.0` and `cudnn` directly via Conda.
+  - Wrapped the Dual-Head architecture in a custom `GradientAccumulationModel(tf.keras.Model)` to override `train_step`.
   - Switched Keras save format from legacy `.h5` to native `.keras` to bypass HDF5 shared-variable collision bugs.
-  - Updated `model.py` DDx Head from 8 to 10 neurons to perfectly map the dataset generator.
-  - Successfully initiated Training Epochs on the RTX 4050, instantly achieving ~80% Etiology Accuracy on Epoch 1.
+  - Successfully initiated Training Epochs on the RTX 4050.
+
+### [2026-08-22] Phase 10: Metadata Architecture Pivot
+- **Action:** Discovered that the V5 training script lacked the auxiliary Metadata input branch. The active training run (Epoch 12+) was executing purely as an Image-Only model.
+- **Decisions Made:** To preserve the extensive GPU time already invested (and satisfy tight deadlines), the User authorized proceeding with a purely **Image-Only V5 architecture** for now. We will reintroduce metadata fusion in a later version. The Frontend and Backend Implementation plans have been updated to completely strip out legacy metadata dependencies.
+
+### [2026-08-22] Phase 11: Backend Refactoring & UI Polish
+- **Action:** Refactored the FastAPI backend to correctly load nested weights from the Custom Keras Model subclass and updated the Frontend UI copy.
+- **Findings:** The Keras `.keras` deserialization caused scope mismatches (`1 variables vs 11 variables`) when trying to deserialize `GradientAccumulationModel`.
+- **Decisions Made:** Bypassed Keras wrapper serialization bugs by explicitly initializing the raw `create_v5_dual_head_model()` architecture in `main.py` and manually loading weights using `model.load_weights(best_model.h5, by_name=True)`. Updated `page.tsx` UI to remove V3/V4 legacy text and clearly define V5 scanning directions for the user.

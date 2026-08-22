@@ -52,3 +52,14 @@ class GradientAccumulationModel(tf.keras.Model):
         # Update metrics
         self.compiled_metrics.update_state(y, y_pred)
         return {m.name: m.result() for m in self.metrics}
+
+    def get_config(self):
+        config = super().get_config()
+        config.update({"accumulation_steps": self.accumulation_steps})
+        return config
+
+    @classmethod
+    def from_config(cls, config):
+        from model import create_v5_dual_head_model
+        base = create_v5_dual_head_model()
+        return cls(inputs=base.inputs, outputs=base.outputs, accumulation_steps=config.get("accumulation_steps", 4), name=config.get("name"))
