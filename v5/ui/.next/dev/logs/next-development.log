@@ -14,3 +14,4 @@
 {"timestamp":"00:18:26.526","source":"Browser","level":"ERROR","message":"Analysis failed: \"Error: Model is still training or failed to load.\\n    at handleAnalyze (src/app/page.tsx:122:15)\\n  120 |       if (!res.ok) {\\n  121 |         const err = await res.json();\\n> 122 |         throw new Error(err.detail || \\\"Analysis failed\\\");\\n      |               ^\\n  123 |       }\\n  124 |       const data = await res.json();\\n  125 |       setResult(data);\" \"(src/app/page.tsx:128:15)\""}
 {"timestamp":"00:26:45.282","source":"Server","level":"LOG","message":"✓ Compiled in 2.2s"}
 {"timestamp":"01:34:35.749","source":"Server","level":"LOG","message":"✓ Compiled in 1051ms"}
+{"timestamp":"02:02:00.622","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
