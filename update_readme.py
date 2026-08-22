@@ -1,4 +1,9 @@
-# DermaScan AI (V5) 🔬
+import os
+
+def update_readme():
+    path = "README.md"
+    
+    new_readme = """# DermaScan AI (V5) 🔬
 
 > **An advanced, multi-modal AI diagnostic assistant designed to triage skin lesions and mitigate skin-tone bias in dermatological deployments.**
 
@@ -15,24 +20,6 @@ This structure acts as a "clinical safety net," utilizing **Focal Loss** to heav
 ### V5.1 Expansion: Continuous Learning Loop
 DermaScan AI now features a production-grade active feedback loop. When a dermatologist clicks "Submit Correction" via the UI to correct an AI misdiagnosis, the image and metadata are securely vaulted into a `/hard_examples/` database. The TensorFlow data pipeline uses a `90/10` Replay Buffer to mathematically penalize and learn from these edge-cases dynamically during the next training run.
 
-
-## 💻 System Requirements
-
-### Hardware Requirements
-- **GPU (Recommended):** NVIDIA GPU with at least 6GB VRAM (e.g., RTX 3060, RTX 4050, or higher) for hardware acceleration.
-- **CPU (Fallback):** Multi-core processor (Intel i5/i7 or AMD Ryzen 5/7) if running CPU-only inference.
-- **RAM:** 16GB Minimum (32GB recommended if training the dataset).
-- **Storage:** 
-  - 1GB for the application and pre-trained weights.
-  - An additional 30GB of NVMe SSD storage if downloading the raw ISIC datasets for training.
-
-### Software Dependencies
-- **Operating System:** Windows 10/11 (WSL2 with Ubuntu heavily recommended) or Native Linux.
-- **Environment Manager:** Miniconda or Anaconda.
-- **Core Stack:** Python 3.10+, Node.js (v18+).
-- **Machine Learning Backend:** TensorFlow 2.15, CUDA Toolkit 11.8.0, cuDNN 8.9.2.
-- **Web Frameworks:** FastAPI (Backend), Next.js / React (Frontend).
-
 ---
 
 ## 📊 Comprehensive Reporting & Clinical Metrics
@@ -42,9 +29,9 @@ DermaScan AI includes an exhaustive reporting pipeline. We have synthesized tech
 
 ---
 
-## 🚀 Getting Started (Using the AI)
+## 🚀 Getting Started (The One-Click Pipelines)
 
-We have heavily optimized the user experience. **You do NOT need to download the massive 25GB image datasets just to use the web application.** The trained model weights are all that is required for inference.
+We have heavily optimized the developer experience. You no longer need to manually configure the frontend and backend.
 
 ### 1. Prerequisites & Cloning
 You must have [Miniconda](https://docs.conda.io/en/latest/miniconda.html) installed.
@@ -53,15 +40,20 @@ git clone https://github.com/Dev-Toido/DermaScan-AI-All-versions.git
 cd DermaScan-AI-All-versions
 ```
 
-### 2. One-Click Initial Setup
+### 2. Dataset Setup
+*Note: Due to size constraints, the raw image datasets are not hosted in this repository.*
+1. Download the merged ISIC + DermaCon-IN datasets.
+2. Extract the images into the `archive/` folder at the root directory.
+
+### 3. One-Click Initial Setup
 Run this script **once** when you first clone the repository. It will automatically build the Conda environment and install the Next.js UI node dependencies.
 ```bash
 chmod +x setup.sh
 ./setup.sh
 ```
 
-### 3. One-Click Application Startup
-Run this script whenever you want to boot up the web interface to use the AI. It concurrently starts the FastAPI backend (Port 8000) and the Next.js frontend (Port 3000), pre-warms the models, and binds them to a single terminal process.
+### 4. One-Click Application Startup (Use the AI)
+Run this script whenever you want to boot up the web interface to use the AI! It concurrently starts the FastAPI backend (Port 8000) and the Next.js frontend (Port 3000), pre-warms the models, and binds them to a single terminal process.
 ```bash
 chmod +x start.sh
 ./start.sh
@@ -70,17 +62,9 @@ chmod +x start.sh
 
 ---
 
-## 🧪 Developer Commands (Training & Evaluation)
+## 🧪 Developer Commands
 
-If you are a researcher who wants to train the models from scratch or run the full diagnostic evaluation suite to generate new Markdown reports, you will need the raw datasets.
-
-### 1. Dataset Setup
-*Note: Due to size constraints, the raw image datasets are not hosted in this repository.*
-1. Download the merged ISIC + DermaCon-IN datasets from [Insert Kaggle/Drive Link Here].
-2. Extract the images into the `archive/` folder at the root directory.
-
-### 2. Generate Super Report
-To run the native evaluation suite over the 25GB dataset and generate new Markdown reports:
+If you want to run the full diagnostic evaluation suite over the 25GB dataset and generate new Markdown reports, use the Super Report script:
 ```bash
 chmod +x run_super_report.sh
 ./run_super_report.sh
@@ -101,3 +85,11 @@ chmod +x run_super_report.sh
 
 ## ⚠️ Disclaimer
 **ACADEMIC PROTOTYPE – Not for clinical use.** This tool is designed to assist, not replace, a medical professional. It is not FDA-approved or certified for definitive clinical diagnosis.
+"""
+    with open(path, "w") as f:
+        f.write(new_readme)
+        
+    print("README updated successfully!")
+
+if __name__ == "__main__":
+    update_readme()

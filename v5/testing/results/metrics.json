@@ -1,18 +1,115 @@
 {
     "image_only": {
-        "top1_accuracy": 0.824,
-        "top3_accuracy": 0.941,
-        "etiology_accuracy": 0.887,
-        "roc_auc": 0.912,
-        "throughput_fps": 42.5,
-        "vram_usage_mb": 1845,
-        "false_negative_rate_mel": 0.042
+        "error": "Layer 'DermaScan_V5_DualHead' expected 0 variables, but received 11 variables during loading. Expected: []"
     },
     "multimodal": {
-        "top1_accuracy": 0.897,
-        "top3_accuracy": 0.983,
-        "etiology_accuracy": 0.952,
-        "roc_auc": 0.976,
+        "top1_accuracy": 0.7432675044883303,
+        "top3_accuracy": 0.9481918440625802,
+        "precision": 0.7228066263734116,
+        "recall": 0.7432675044883303,
+        "f1_score": 0.7274295876814855,
+        "confusion_matrix": [
+            [
+                335,
+                250,
+                12,
+                13,
+                30,
+                0,
+                5,
+                4,
+                2
+            ],
+            [
+                83,
+                1837,
+                14,
+                3,
+                27,
+                0,
+                9,
+                0,
+                0
+            ],
+            [
+                18,
+                48,
+                347,
+                29,
+                13,
+                0,
+                11,
+                17,
+                0
+            ],
+            [
+                11,
+                5,
+                32,
+                56,
+                21,
+                0,
+                0,
+                7,
+                0
+            ],
+            [
+                71,
+                110,
+                13,
+                26,
+                166,
+                0,
+                4,
+                8,
+                0
+            ],
+            [
+                5,
+                14,
+                7,
+                0,
+                9,
+                0,
+                1,
+                4,
+                0
+            ],
+            [
+                0,
+                4,
+                2,
+                0,
+                0,
+                0,
+                36,
+                0,
+                0
+            ],
+            [
+                16,
+                9,
+                21,
+                7,
+                5,
+                0,
+                0,
+                23,
+                0
+            ],
+            [
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                98
+            ]
+        ],
+        "etiology_accuracy": 0.8825339830725827,
         "throughput_fps": 38.2,
         "vram_usage_mb": 2104,
         "false_negative_rate_mel": 0.011

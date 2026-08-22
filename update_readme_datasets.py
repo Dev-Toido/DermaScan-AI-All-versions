@@ -1,4 +1,9 @@
-# DermaScan AI (V5) 🔬
+import os
+
+def update_readme():
+    path = "README.md"
+    
+    new_readme = """# DermaScan AI (V5) 🔬
 
 > **An advanced, multi-modal AI diagnostic assistant designed to triage skin lesions and mitigate skin-tone bias in dermatological deployments.**
 
@@ -14,24 +19,6 @@ This structure acts as a "clinical safety net," utilizing **Focal Loss** to heav
 
 ### V5.1 Expansion: Continuous Learning Loop
 DermaScan AI now features a production-grade active feedback loop. When a dermatologist clicks "Submit Correction" via the UI to correct an AI misdiagnosis, the image and metadata are securely vaulted into a `/hard_examples/` database. The TensorFlow data pipeline uses a `90/10` Replay Buffer to mathematically penalize and learn from these edge-cases dynamically during the next training run.
-
-
-## 💻 System Requirements
-
-### Hardware Requirements
-- **GPU (Recommended):** NVIDIA GPU with at least 6GB VRAM (e.g., RTX 3060, RTX 4050, or higher) for hardware acceleration.
-- **CPU (Fallback):** Multi-core processor (Intel i5/i7 or AMD Ryzen 5/7) if running CPU-only inference.
-- **RAM:** 16GB Minimum (32GB recommended if training the dataset).
-- **Storage:** 
-  - 1GB for the application and pre-trained weights.
-  - An additional 30GB of NVMe SSD storage if downloading the raw ISIC datasets for training.
-
-### Software Dependencies
-- **Operating System:** Windows 10/11 (WSL2 with Ubuntu heavily recommended) or Native Linux.
-- **Environment Manager:** Miniconda or Anaconda.
-- **Core Stack:** Python 3.10+, Node.js (v18+).
-- **Machine Learning Backend:** TensorFlow 2.15, CUDA Toolkit 11.8.0, cuDNN 8.9.2.
-- **Web Frameworks:** FastAPI (Backend), Next.js / React (Frontend).
 
 ---
 
@@ -101,3 +88,11 @@ chmod +x run_super_report.sh
 
 ## ⚠️ Disclaimer
 **ACADEMIC PROTOTYPE – Not for clinical use.** This tool is designed to assist, not replace, a medical professional. It is not FDA-approved or certified for definitive clinical diagnosis.
+"""
+    with open(path, "w") as f:
+        f.write(new_readme)
+        
+    print("README updated successfully!")
+
+if __name__ == "__main__":
+    update_readme()

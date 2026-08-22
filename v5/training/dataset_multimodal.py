@@ -55,7 +55,7 @@ def load_and_preprocess_multimodal(image_path, metadata_vec, ddx_label, eti_labe
     # Yield ((image, metadata), (ddx, eti))
     return (img, metadata_vec), (ddx_one_hot, eti_one_hot)
 
-def get_image_path(row, base_archive_path="../../archive"):
+def get_image_path(row, base_archive_path=os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "archive"))):
     if row['source'] == 'ISIC':
         return os.path.join(base_archive_path, 'ISIC', 'ISIC_2019_Training_Input', 'ISIC_2019_Training_Input', f"{row['image_id']}.jpg")
     elif row['source'] == 'Diverse':
@@ -64,7 +64,7 @@ def get_image_path(row, base_archive_path="../../archive"):
     else:
         return os.path.join(base_archive_path, f"{row['image_id']}.jpg")
 
-def create_dataset_from_df(df, batch_size=16, img_size=(380, 380), is_training=True, mask_prob=0.2, base_archive_path="../../archive"):
+def create_dataset_from_df(df, batch_size=16, img_size=(380, 380), is_training=True, mask_prob=0.2, base_archive_path=os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "archive"))):
     """
     Creates a tf.data.Dataset from a Pandas DataFrame, supporting multimodal inputs.
     """

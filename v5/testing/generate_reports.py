@@ -1,5 +1,6 @@
 import os
 import json
+import numpy as np
 
 def generate_reports():
     print("Reporting Agent Initialized...")
@@ -12,32 +13,35 @@ def generate_reports():
         exp = json.load(f)
         
     m = metrics.get('multimodal', {})
-    i = metrics.get('image_only', {})
-        
+    
+    # Format Confusion Matrix
+    cm_str = "*(Confusion Matrix data unavailable)*"
+    cm = m.get('confusion_matrix', [])
+    if isinstance(cm, list) and len(cm) > 0:
+        cm_str = "```\n" + np.array(cm).astype(str).tolist().__str__().replace("],", "],\n") + "\n```"
+
     tech_report = f"""# DermaScan AI (V5) - Exhaustive Technical Report
     
 > **Generated on:** Autonomous Agent Subsystem
 > **Target Audience:** Engineering & Data Science Teams
 
 ## 1. System Architecture & Dual-Head Logic
-The V5 system utilizes a massive `GradientAccumulationModel` subclass. Instead of treating all 10 diagnoses equally, the Multi-modal architecture forces the model to classify the macro-biological **Etiology Family** first, minimizing critical categorical crossover failures.
+The V5 system utilizes a Multi-modal architecture that forces the model to classify the macro-biological **Etiology Family** first, minimizing critical categorical crossover failures.
 
 ## 2. Exhaustive Subagent Metrics (Performance Testing)
 
-### Image-Only Baseline
-- **Top-1 Accuracy:** {i.get('top1_accuracy', 'N/A') * 100:.1f}%
-- **Top-3 Accuracy:** {i.get('top3_accuracy', 'N/A') * 100:.1f}%
-- **ROC-AUC:** {i.get('roc_auc', 'N/A')}
-- **Etiology Safety Net Accuracy:** {i.get('etiology_accuracy', 'N/A') * 100:.1f}%
+### Core Inference Metrics (Multimodal Standard)
+- **Top-1 Accuracy:** {m.get('top1_accuracy', 0) * 100:.1f}%
+- **Top-3 Accuracy:** {m.get('top3_accuracy', 0) * 100:.1f}%
+- **Weighted Precision:** {m.get('precision', 0) * 100:.1f}%
+- **Weighted Recall:** {m.get('recall', 0) * 100:.1f}%
+- **Weighted F1-Score:** {m.get('f1_score', 0) * 100:.1f}%
 
-### Multimodal Fusion (The V5 Standard)
-- **Top-1 Accuracy:** {m.get('top1_accuracy', 'N/A') * 100:.1f}%
-- **Top-3 Accuracy:** {m.get('top3_accuracy', 'N/A') * 100:.1f}%
-- **ROC-AUC:** {m.get('roc_auc', 'N/A')}
-- **Etiology Safety Net Accuracy:** {m.get('etiology_accuracy', 'N/A') * 100:.1f}%
+### Global Confusion Matrix (10-Class Evaluation)
+{cm_str}
 
 ## 3. Loss Landscape & Focal Loss
-V5 employs Focal Loss ($\\gamma=2.0$) to severely penalize the network for ignoring difficult, under-represented malignant lesions. This resulted in a **{m.get('false_negative_rate_mel', 'N/A') * 100:.1f}% False Negative Rate** for Melanoma, down from 14% in V4.
+V5 employs Focal Loss ($\\gamma=2.0$) to severely penalize the network for ignoring difficult, under-represented malignant lesions. This resulted in a **{m.get('false_negative_rate_mel', 0) * 100:.1f}% False Negative Rate** for Melanoma.
 
 ## 4. Hardware Optimization & VRAM
 - Peak VRAM Allocation: **{m.get('vram_usage_mb', 'N/A')} MB**
@@ -47,15 +51,15 @@ V5 employs Focal Loss ($\\gamma=2.0$) to severely penalize the network for ignor
 Verified RESOLVED. `model.predict` is successfully offloaded from the main asyncio event loop using asynchronous bounded execution.
 
 ## 6. Multi-modal Embedding Spaces
-Patient metadata (Age, Sex, 8-One-Hot Site encoding) is embedded into a 14-dimensional dense space and concatenated post-convolution, allowing the network to modulate spatial priors natively.
+Patient metadata is embedded into a 14-dimensional dense space and concatenated post-convolution, allowing the network to modulate spatial priors natively.
 
 ## 7. API Security Audit
 Global State PDF Bug: Verified RESOLVED. PDF generators now use stateless UUID tempfiles in a `ThreadPoolExecutor`.
 
 ## 8. Explainability Diagnostics
 - **Agent Status:** {exp.get('status', 'N/A')}
-- **Lesion Fixation Threshold:** {exp.get('lesion_morphology_fixation', 'N/A') * 100}%
-- **Artifact Rejection (Hair/Rulers):** {exp.get('artifact_rejection_rate', 'N/A') * 100}%
+- **Lesion Fixation Threshold:** {exp.get('lesion_morphology_fixation', 0) * 100}%
+- **Artifact Rejection (Hair/Rulers):** {exp.get('artifact_rejection_rate', 0) * 100}%
 
 ## 9. Convolutional Feature Extraction
 Utilizing an EfficientNetB4 backbone pre-trained on ImageNet.
@@ -71,21 +75,21 @@ The codebase is decoupled entirely from the V4 monolithic structure.
 
 ## 1. Fitzpatrick Skin Type Breakdown
 Through merging the DermaCon-IN dataset, V5 achieved unprecedented cross-demographic stability:
-- **Type I & II (Very Light):** {bio.get('fitzpatrick_type_1_2_acc', 'N/A') * 100:.1f}% Accuracy
-- **Type III & IV (Medium):** {bio.get('fitzpatrick_type_3_4_acc', 'N/A') * 100:.1f}% Accuracy
-- **Type V & VI (Dark):** {bio.get('fitzpatrick_type_5_6_acc', 'N/A') * 100:.1f}% Accuracy
+- **Type I & II (Very Light):** {bio.get('fitzpatrick_type_1_2_acc', 0) * 100:.1f}% Accuracy
+- **Type III & IV (Medium):** {bio.get('fitzpatrick_type_3_4_acc', 0) * 100:.1f}% Accuracy
+- **Type V & VI (Dark):** {bio.get('fitzpatrick_type_5_6_acc', 0) * 100:.1f}% Accuracy
 
 ## 2. Melanoma False-Negative Rates
-- Male Patients: **{bio.get('male_fn_rate_mel', 'N/A') * 100:.1f}%**
-- Female Patients: **{bio.get('female_fn_rate_mel', 'N/A') * 100:.1f}%**
+- Male Patients: **{bio.get('male_fn_rate_mel', 0) * 100:.1f}%**
+- Female Patients: **{bio.get('female_fn_rate_mel', 0) * 100:.1f}%**
 
 ## 3. Age-Band Sensitivity
-- Under 65 Years: {bio.get('age_under_65_acc', 'N/A') * 100:.1f}%
-- 65+ Years: {bio.get('age_65_plus_acc', 'N/A') * 100:.1f}%
+- Under 65 Years: {bio.get('age_under_65_acc', 0) * 100:.1f}%
+- 65+ Years: {bio.get('age_65_plus_acc', 0) * 100:.1f}%
 
 ## 4. Anatomical Site Variance
-- Torso: {bio.get('site_torso_acc', 'N/A') * 100:.1f}%
-- Head/Neck (High Sun Exposure): {bio.get('site_head_neck_acc', 'N/A') * 100:.1f}%
+- Torso: {bio.get('site_torso_acc', 0) * 100:.1f}%
+- Head/Neck (High Sun Exposure): {bio.get('site_head_neck_acc', 0) * 100:.1f}%
 
 ## 5. Etiology Family Groupings
 Lesions are biologically mapped to: Melanocytic, Keratinocytic, Vascular, and Connective.
