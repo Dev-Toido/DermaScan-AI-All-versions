@@ -12,8 +12,8 @@ This report identifies critical UI, performance, and robustness issues in the cu
 - **Disclaimer Banner**: The current banner (`⚠️ ACADEMIC PROTOTYPE...`) is styled as a large, obtrusive block. It should be visible but elegantly integrated so it doesn't detract from the premium feel.
 
 ### 2. Grad-CAM & Image Alignment
-- **Mismatch**: The UI currently displays the *raw uploaded image* alongside the Grad-CAM overlay. Since the Grad-CAM is generated from the 224x224 preprocessed tensor and then resized back to the raw image size (or vice versa), there can be aspect ratio stretching. 
-- **Fix**: The UI must display the *preprocessed* 224x224 image directly next to the 224x224 Grad-CAM output. This ensures 1:1 pixel alignment of the heatmap to the visual features the model actually "saw".
+- **Mismatch**: The UI currently displays the *raw uploaded image* alongside the Grad-CAM overlay. Since the Grad-CAM is generated from the 380x380 preprocessed tensor and then resized back to the raw image size (or vice versa), there can be aspect ratio stretching. 
+- **Fix**: The UI must display the *preprocessed* 380x380 image directly next to the 380x380 Grad-CAM output. This ensures 1:1 pixel alignment of the heatmap to the visual features the model actually "saw".
 
 ### 3. Inference Performance
 - **Slow First Inference**: TensorFlow's XLA JIT compilation (`tf.config.optimizer.set_jit(True)`) compiles the execution graph on the *first* forward pass. This causes a significant delay (often 5-15 seconds) when analyzing the very first patient image, breaking the illusion of a fast, responsive app.

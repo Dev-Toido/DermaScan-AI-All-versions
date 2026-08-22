@@ -71,55 +71,64 @@ def create_csv_dataset_generator(csv_path, batch_size=16, img_size=(380, 380), i
     return ds
 
 
-def create_replay_buffer_generator(standard_csv_path, hard_csv_path, batch_size=16, img_size=(380, 380)):
-    """
-    Continuous Learning Loop implementation.
-    Mixes standard historical dataset with hard examples submitted by doctors.
-    Enforces a 90/10 split to prevent catastrophic forgetting.
-    """
-    # Create the standard dataset generator (unbatched for sampling)
-    standard_ds = create_csv_dataset_generator(standard_csv_path, batch_size=batch_size, img_size=img_size, is_training=True)
-    if standard_ds is not None:
-        standard_ds = standard_ds.unbatch()
-    
-    AUTOTUNE = tf.data.AUTOTUNE
-    
-    if not os.path.exists(hard_csv_path):
-        print(f"No hard examples found at {hard_csv_path}. Using standard dataset only.")
-        return standard_ds.batch(batch_size).prefetch(AUTOTUNE) if standard_ds else None
+def build_sub_dataset(csv_path, img_dir, img_size, AUTOTUNE):
+    if not os.path.exists(csv_path):
+        return None
+    df = pd.read_csv(csv_path)
+    if len(df) == 0:
+        return None
         
-    df_hard = pd.read_csv(hard_csv_path)
-    if len(df_hard) == 0:
-        return standard_ds.batch(batch_size).prefetch(AUTOTUNE) if standard_ds else None
-        
-    print(f"✅ Found {len(df_hard)} hard examples. Activating Replay Buffer (90/10 mix).")
-    
-    # Construct paths for hard examples
-    base_dir = os.path.dirname(__file__)
-    df_hard['full_path'] = df_hard['image_id'].apply(lambda x: os.path.abspath(os.path.join(base_dir, "..", "data_preparation", "hard_examples", f"{x}.jpg")))
+    df['full_path'] = df['image_id'].apply(lambda x: os.path.abspath(os.path.join(img_dir, f"{x}.jpg")))
     
     diag_map = {'mel':0, 'nv':1, 'bcc':2, 'ak':3, 'bkl':4, 'df':5, 'vasc':6, 'scc':7, 'unk':8}
-    df_hard['ddx_idx'] = df_hard['diagnosis'].str.lower().map(diag_map).fillna(9).astype(int)
+    df['ddx_idx'] = df['diagnosis'].str.lower().map(diag_map).fillna(9).astype(int)
     
-    # Map etiology (Melanocytic:0, Epithelial:1, Vascular:2, Other:3)
     etiology_map = {0:0, 1:0, 2:1, 3:1, 4:1, 7:1, 6:2, 5:3, 8:3, 9:3}
-    df_hard['etiology_family'] = df_hard['ddx_idx'].map(etiology_map).fillna(3).astype(int)
+    df['etiology_family'] = df['ddx_idx'].map(etiology_map).fillna(3).astype(int)
     
-    paths = df_hard['full_path'].values
-    ddx_labels = df_hard['ddx_idx'].values
-    eti_labels = df_hard['etiology_family'].values
+    ds = tf.data.Dataset.from_tensor_slices((df['full_path'].values, df['ddx_idx'].values, df['etiology_family'].values))
+    ds = ds.shuffle(1000).repeat()
+    ds = ds.map(lambda p, d, e: load_and_preprocess_image(p, d, e, img_size=img_size), num_parallel_calls=AUTOTUNE)
+    return ds
+
+def create_replay_buffer_generator(standard_csv_path, hard_csv_path, verified_csv_path, batch_size=16, img_size=(380, 380)):
+    """
+    Dual-Stream Active Learning Architecture.
+    Tri-Stream Sampling: 75% Standard, 15% Verified Positives, 10% Hard Examples.
+    """
+    AUTOTUNE = tf.data.AUTOTUNE
     
-    hard_ds = tf.data.Dataset.from_tensor_slices((paths, ddx_labels, eti_labels))
-    hard_ds = hard_ds.shuffle(1000).repeat()
+    standard_ds = create_csv_dataset_generator(standard_csv_path, batch_size=batch_size, img_size=img_size, is_training=True)
+    if standard_ds is not None:
+        standard_ds = standard_ds.unbatch().repeat()
+        
+    base_dir = os.path.dirname(__file__)
+    hard_img_dir = os.path.abspath(os.path.join(base_dir, "..", "data_preparation", "hard_examples"))
+    verified_img_dir = os.path.abspath(os.path.join(base_dir, "..", "data_preparation", "verified_positives"))
     
-    hard_ds = hard_ds.map(
-        lambda p, d, e: load_and_preprocess_image(p, d, e, img_size=img_size), 
-        num_parallel_calls=AUTOTUNE
-    )
+    hard_ds = build_sub_dataset(hard_csv_path, hard_img_dir, img_size, AUTOTUNE)
+    verified_ds = build_sub_dataset(verified_csv_path, verified_img_dir, img_size, AUTOTUNE)
     
-    # Sample from both datasets with 90/10 split
-    replay_ds = tf.data.Dataset.sample_from_datasets([standard_ds.repeat(), hard_ds], weights=[0.90, 0.10])
+    datasets = [standard_ds]
+    weights = [1.0]
     
+    if hard_ds and verified_ds:
+        print("✅ Dual-Stream Active Learning Activated (75/15/10 Mix)")
+        datasets = [standard_ds, verified_ds, hard_ds]
+        weights = [0.75, 0.15, 0.10]
+    elif hard_ds:
+        print("✅ Single-Stream Replay Buffer Activated (90/10 Mix)")
+        datasets = [standard_ds, hard_ds]
+        weights = [0.90, 0.10]
+    elif verified_ds:
+        print("✅ Domain Adaptation Activated (85/15 Mix)")
+        datasets = [standard_ds, verified_ds]
+        weights = [0.85, 0.15]
+    else:
+        print("No active learning buffers found. Using standard dataset only.")
+        return standard_ds.batch(batch_size).prefetch(AUTOTUNE) if standard_ds else None
+        
+    replay_ds = tf.data.Dataset.sample_from_datasets(datasets, weights=weights)
     return replay_ds.batch(batch_size).prefetch(buffer_size=AUTOTUNE)
 
 if __name__ == "__main__":

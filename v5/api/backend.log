@@ -1,72 +1,51 @@
 INFO:     Will watch for changes in these directories: ['/home/garai/ai_projects/DermaScan-AI-All-versions/v5/api']
 INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [158461] using StatReload
-2026-08-22 18:44:34.908763: I tensorflow/core/util/port.cc:113] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
-2026-08-22 18:44:35.105791: E external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:9261] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
-2026-08-22 18:44:35.105824: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:607] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
-2026-08-22 18:44:35.113711: E external/local_xla/xla/stream_executor/cuda/cuda_blas.cc:1515] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
-2026-08-22 18:44:35.139387: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+INFO:     Started reloader process [275840] using StatReload
+2026-08-22 19:54:55.366808: I tensorflow/core/util/port.cc:113] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-08-22 19:54:55.414527: E external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:9261] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+2026-08-22 19:54:55.414591: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:607] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+2026-08-22 19:54:55.416193: E external/local_xla/xla/stream_executor/cuda/cuda_blas.cc:1515] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2026-08-22 19:54:55.428876: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
 To enable the following instructions: AVX2 AVX_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
-2026-08-22 18:44:36.018553: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
-INFO:     Started server process [158464]
+2026-08-22 19:54:56.282788: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+INFO:     Started server process [275843]
 INFO:     Waiting for application startup.
-2026-08-22 18:44:37.278455: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:887] could not open file to read NUMA node: /sys/bus/pci/devices/0000:01:00.0/numa_node
+2026-08-22 19:54:57.624549: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:887] could not open file to read NUMA node: /sys/bus/pci/devices/0000:01:00.0/numa_node
 Your kernel may have been built without NUMA support.
-2026-08-22 18:44:37.440826: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:887] could not open file to read NUMA node: /sys/bus/pci/devices/0000:01:00.0/numa_node
+2026-08-22 19:54:57.717930: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:887] could not open file to read NUMA node: /sys/bus/pci/devices/0000:01:00.0/numa_node
 Your kernel may have been built without NUMA support.
-2026-08-22 18:44:37.440885: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:887] could not open file to read NUMA node: /sys/bus/pci/devices/0000:01:00.0/numa_node
+2026-08-22 19:54:57.717980: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:887] could not open file to read NUMA node: /sys/bus/pci/devices/0000:01:00.0/numa_node
 Your kernel may have been built without NUMA support.
-2026-08-22 18:44:37.442588: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:887] could not open file to read NUMA node: /sys/bus/pci/devices/0000:01:00.0/numa_node
+2026-08-22 19:54:57.719248: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:887] could not open file to read NUMA node: /sys/bus/pci/devices/0000:01:00.0/numa_node
 Your kernel may have been built without NUMA support.
-2026-08-22 18:44:37.442666: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:887] could not open file to read NUMA node: /sys/bus/pci/devices/0000:01:00.0/numa_node
+2026-08-22 19:54:57.719291: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:887] could not open file to read NUMA node: /sys/bus/pci/devices/0000:01:00.0/numa_node
 Your kernel may have been built without NUMA support.
-2026-08-22 18:44:37.442684: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:887] could not open file to read NUMA node: /sys/bus/pci/devices/0000:01:00.0/numa_node
+2026-08-22 19:54:57.719310: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:887] could not open file to read NUMA node: /sys/bus/pci/devices/0000:01:00.0/numa_node
 Your kernel may have been built without NUMA support.
-2026-08-22 18:44:37.644926: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:887] could not open file to read NUMA node: /sys/bus/pci/devices/0000:01:00.0/numa_node
+2026-08-22 19:54:57.833151: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:887] could not open file to read NUMA node: /sys/bus/pci/devices/0000:01:00.0/numa_node
 Your kernel may have been built without NUMA support.
-2026-08-22 18:44:37.644987: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:887] could not open file to read NUMA node: /sys/bus/pci/devices/0000:01:00.0/numa_node
+2026-08-22 19:54:57.833255: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:887] could not open file to read NUMA node: /sys/bus/pci/devices/0000:01:00.0/numa_node
 Your kernel may have been built without NUMA support.
-2026-08-22 18:44:37.644993: I tensorflow/core/common_runtime/gpu/gpu_device.cc:2022] Could not identify NUMA node of platform GPU id 0, defaulting to 0.  Your kernel may not have been built with NUMA support.
-2026-08-22 18:44:37.645016: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:887] could not open file to read NUMA node: /sys/bus/pci/devices/0000:01:00.0/numa_node
+2026-08-22 19:54:57.833264: I tensorflow/core/common_runtime/gpu/gpu_device.cc:2022] Could not identify NUMA node of platform GPU id 0, defaulting to 0.  Your kernel may not have been built with NUMA support.
+2026-08-22 19:54:57.833290: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:887] could not open file to read NUMA node: /sys/bus/pci/devices/0000:01:00.0/numa_node
 Your kernel may have been built without NUMA support.
-2026-08-22 18:44:37.645035: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1929] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 3536 MB memory:  -> device: 0, name: NVIDIA GeForce RTX 4050 Laptop GPU, pci bus id: 0000:01:00.0, compute capability: 8.9
-2026-08-22 18:44:41.658483: I external/local_tsl/tsl/platform/default/subprocess.cc:304] Start cannot spawn child process: No such file or directory
+2026-08-22 19:54:57.833312: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1929] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 3536 MB memory:  -> device: 0, name: NVIDIA GeForce RTX 4050 Laptop GPU, pci bus id: 0000:01:00.0, compute capability: 8.9
+2026-08-22 19:55:01.729635: I external/local_tsl/tsl/platform/default/subprocess.cc:304] Start cannot spawn child process: No such file or directory
 ✅ Model A (Vision Expert) loaded
 ✅ Model B (Multimodal Expert) loaded
 ✅ Model C (Meta-Learner) loaded
-2026-08-22 18:44:53.135710: I external/local_xla/xla/service/service.cc:168] XLA service 0x5af6d98dd2b0 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
-2026-08-22 18:44:53.135782: I external/local_xla/xla/service/service.cc:176]   StreamExecutor device (0): NVIDIA GeForce RTX 4050 Laptop GPU, Compute Capability 8.9
-2026-08-22 18:44:53.177478: I tensorflow/compiler/mlir/tensorflow/utils/dump_mlir_util.cc:269] disabling MLIR crash reproducer, set env var `MLIR_CRASH_REPRODUCER_DIRECTORY` to enable.
-2026-08-22 18:44:53.750850: I external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:454] Loaded cuDNN version 8904
+2026-08-22 19:55:15.360937: I external/local_xla/xla/service/service.cc:168] XLA service 0x6477c0e500f0 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
+2026-08-22 19:55:15.360979: I external/local_xla/xla/service/service.cc:176]   StreamExecutor device (0): NVIDIA GeForce RTX 4050 Laptop GPU, Compute Capability 8.9
+2026-08-22 19:55:15.427139: I tensorflow/compiler/mlir/tensorflow/utils/dump_mlir_util.cc:269] disabling MLIR crash reproducer, set env var `MLIR_CRASH_REPRODUCER_DIRECTORY` to enable.
+2026-08-22 19:55:16.111154: I external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:454] Loaded cuDNN version 8904
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1787424306.126524  158562 device_compiler.h:186] Compiled cluster using XLA!  This line is logged at most once for the lifetime of the process.
-⚠️ Warning: Could not load models. Error: in user code:
-
-    File "/home/garai/miniconda3/envs/dermascan/lib/python3.11/site-packages/keras/src/engine/training.py", line 2440, in predict_function  *
-        return step_function(self, iterator)
-    File "/home/garai/miniconda3/envs/dermascan/lib/python3.11/site-packages/keras/src/engine/training.py", line 2425, in step_function  **
-        outputs = model.distribute_strategy.run(run_step, args=(data,))
-    File "/home/garai/miniconda3/envs/dermascan/lib/python3.11/site-packages/keras/src/engine/training.py", line 2413, in run_step  **
-        outputs = model.predict_step(data)
-    File "/home/garai/miniconda3/envs/dermascan/lib/python3.11/site-packages/keras/src/engine/training.py", line 2381, in predict_step
-        return self(x, training=False)
-    File "/home/garai/miniconda3/envs/dermascan/lib/python3.11/site-packages/keras/src/utils/traceback_utils.py", line 70, in error_handler
-        raise e.with_traceback(filtered_tb) from None
-    File "/home/garai/miniconda3/envs/dermascan/lib/python3.11/site-packages/keras/src/engine/input_spec.py", line 219, in assert_input_compatibility
-        raise ValueError(
-
-    ValueError: Layer "V5_Meta_Learner" expects 1 input(s), but it received 3 input tensors. Inputs received: [<tf.Tensor 'IteratorGetNext:0' shape=(None, 10) dtype=float32>, <tf.Tensor 'IteratorGetNext:1' shape=(None, 10) dtype=float32>, <tf.Tensor 'IteratorGetNext:2' shape=(None, 14) dtype=float32>]
-
+I0000 00:00:1787428530.048204  275929 device_compiler.h:186] Compiled cluster using XLA!  This line is logged at most once for the lifetime of the process.
+✅ All Models pre-warmed.
 INFO:     Application startup complete.
-Traceback (most recent call last):
-  File "/home/garai/ai_projects/DermaScan-AI-All-versions/v5/api/main.py", line 192, in analyze_lesion
-    preds_a = model_a.predict(img_input_a, verbose=0)
-              ^^^^^^^^^^^^^^^
-AttributeError: 'NoneType' object has no attribute 'predict'
-INFO:     127.0.0.1:53244 - "POST /api/analyze HTTP/1.1" 500 Internal Server Error
-Traceback (most recent call last):
-  File "/home/garai/ai_projects/DermaScan-AI-All-versions/v5/api/main.py", line 192, in analyze_lesion
-    preds_a = model_a.predict(img_input_a, verbose=0)
-              ^^^^^^^^^^^^^^^
-AttributeError: 'NoneType' object has no attribute 'predict'
-INFO:     127.0.0.1:53250 - "POST /api/analyze HTTP/1.1" 500 Internal Server Error
+2026-08-22 19:56:50.079470: I external/local_tsl/tsl/platform/default/subprocess.cc:304] Start cannot spawn child process: No such file or directory
+INFO:     127.0.0.1:47402 - "POST /api/analyze HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [275843]
+INFO:     Stopping reloader process [275840]

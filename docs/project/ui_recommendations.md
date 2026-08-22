@@ -19,8 +19,8 @@ To present DermaScan AI V3 as a competition-ready clinical tool, the interface m
 - *Reasoning*: The current 0.6 confidence threshold for the safety net is great for clinical safety but can lead to uncompelling live demos if the model outputs 0.58 on a test image. This toggle allows presenters to manually bypass the strict clinical threshold for showcase purposes while keeping it active by default.
 
 ### 3. Visual Layout & Alignment
-- **Preprocessed Image Display**: Currently, the raw uploaded image is shown next to the Grad-CAM overlay. This causes visual mismatch because Grad-CAM is mapped to the 224x224 input tensor.
-  - *Recommendation*: Display the *resized* (224x224) image in `col1` and the Grad-CAM overlay (also 224x224) in `col2`. This guarantees perfect 1:1 visual alignment, making the explainability feature significantly more trustworthy.
+- **Preprocessed Image Display**: Currently, the raw uploaded image is shown next to the Grad-CAM overlay. This causes visual mismatch because Grad-CAM is mapped to the 380x380 input tensor.
+  - *Recommendation*: Display the *resized* (380x380) image in `col1` and the Grad-CAM overlay (also 380x380) in `col2`. This guarantees perfect 1:1 visual alignment, making the explainability feature significantly more trustworthy.
 - **Animations**: Introduce subtle Lottie animations and ensure buttons use gradient backgrounds with hover transformations to feel highly responsive.
 
 ## Conclusion

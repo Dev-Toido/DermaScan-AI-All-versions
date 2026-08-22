@@ -108,7 +108,14 @@ def load_models():
         
         preds_a = model_a.predict(dummy_img, verbose=0)
         preds_b = model_b.predict([dummy_img, dummy_meta], verbose=0)
-        _ = model_c.predict([preds_a[0], preds_b[0], dummy_meta], verbose=0)
+        
+        combined_dummy = np.concatenate([
+            preds_a[0], preds_a[1], 
+            preds_b[0], preds_b[1], 
+            dummy_meta
+        ], axis=1)
+        
+        _ = model_c.predict(combined_dummy, verbose=0)
         
         print("✅ All Models pre-warmed.", flush=True)
     except Exception as e:
@@ -197,11 +204,16 @@ def analyze_lesion(
         preds_b = model_b.predict([img_input_b, meta_input], verbose=0)
         
         # --- Model C Inference (Meta-Learner) ---
-        # Note: Model A and B both return [ddx_preds, eti_preds]
-        # We only pass the DDX predictions to the MetaLearner
-        preds_c = model_c.predict([preds_a[0], preds_b[0], meta_input], verbose=0)
+        # Combine all predictions and metadata into a single vector of length 42
+        combined_input = np.concatenate([
+            preds_a[0], preds_a[1], 
+            preds_b[0], preds_b[1], 
+            meta_input
+        ], axis=1)
         
-        ddx_preds = preds_c[0]       # Shape (10,)
+        preds_c = model_c.predict(combined_input, verbose=0)
+        
+        ddx_preds = preds_c[0][0]       # Shape (10,)
         
         # We still need etiology for the risk calculator, so we just average A and B's etiology
         etiology_preds = (preds_a[1][0] + preds_b[1][0]) / 2.0
@@ -276,6 +288,7 @@ class FeedbackRequest(BaseModel):
     age: str
     sex: str
     anatom_site: str
+    is_correct: bool = False
 
 @app.post("/api/submit_feedback")
 def submit_feedback(data: FeedbackRequest):

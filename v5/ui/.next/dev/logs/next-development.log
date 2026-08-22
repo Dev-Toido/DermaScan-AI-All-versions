@@ -1,3 +1,5 @@
-{"timestamp":"00:00:01.204","source":"Server","level":"LOG","message":""}
-{"timestamp":"00:01:22.986","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
-{"timestamp":"00:02:11.758","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:00:00.596","source":"Server","level":"LOG","message":""}
+{"timestamp":"00:00:05.492","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:01:07.365","source":"Browser","level":"ERROR","message":"unhandledRejection: Error: Window message \"chrome: call method\" timed out."}
+{"timestamp":"00:01:48.256","source":"Server","level":"ERROR","message":"[browser] \"\\u001b[31m⨯ unhandledRejection: Error: Window message \\\"chrome: call method\\\" timed out.\\u001b[39m\\n\\u001b[31m    at <unknown> (chrome-extension://bekkpoinfafbjglppgdobfdeckghdhlo/assets/js/content.js:13:102787)\\u001b[39m\""}
+{"timestamp":"00:01:48.257","source":"Browser","level":"ERROR","message":"\u001b[31m⨯ unhandledRejection: Error: Window message \"chrome: call method\" timed out.\u001b[39m\n\u001b[31m    at <unknown> (chrome-extension://bekkpoinfafbjglppgdobfdeckghdhlo/assets/js/content.js:13:102787)\u001b[39m"}

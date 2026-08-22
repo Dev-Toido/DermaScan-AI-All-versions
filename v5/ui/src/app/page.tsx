@@ -42,7 +42,10 @@ export default function LandingAndDashboard() {
   const [feedbackDiagnosis, setFeedbackDiagnosis] = useState("mel");
   const [feedbackSubmitting, setFeedbackSubmitting] = useState(false);
 
-  // Removed Metadata State
+  // Metadata State
+  const [age, setAge] = useState("");
+  const [sex, setSex] = useState("");
+  const [anatomSite, setAnatomSite] = useState("");
 
   // Spotlight Cursor State
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -109,7 +112,9 @@ export default function LandingAndDashboard() {
   };
 
   // ── V5 Analysis Handler ───────────────────────────────────────────────────
-  const submitFeedback = async () => {
+  const [showThankYou, setShowThankYou] = useState(false);
+
+  const submitFeedback = async (isCorrect: boolean) => {
     if (!result || !result.cropped_image) return;
     setFeedbackSubmitting(true);
     try {
@@ -119,15 +124,23 @@ export default function LandingAndDashboard() {
         body: JSON.stringify({
           image_b64: result.cropped_image,
           original_diagnosis: result.top_diagnosis,
-          corrected_diagnosis: feedbackDiagnosis,
-          age: "unknown",
-          sex: "unknown",
-          anatom_site: "unknown"
+          corrected_diagnosis: isCorrect ? result.top_diagnosis : feedbackDiagnosis,
+          age: age || "unknown",
+          sex: sex || "unknown",
+          anatom_site: anatomSite || "unknown",
+          is_correct: isCorrect
         })
       });
       if (res.ok) {
-        alert("Correction saved! This edge-case will be heavily penalized in the next training epoch.");
+        setShowThankYou(true);
         setShowFeedback(false);
+        // Timed auto-clear
+        setTimeout(() => {
+          setShowThankYou(false);
+          setResult(null);
+          setSelectedImage(null);
+          setPreviewUrl(null);
+        }, 3000);
       } else {
         alert("Failed to submit feedback.");
       }
@@ -145,6 +158,9 @@ export default function LandingAndDashboard() {
     
     const formData = new FormData();
     formData.append("file", selectedImage);
+    if (age) formData.append("age", age);
+    if (sex) formData.append("sex", sex);
+    if (anatomSite) formData.append("anatom_site", anatomSite);
     
     try {
       const res = await fetch(`${API_BASE}/api/analyze`, {
@@ -403,9 +419,6 @@ export default function LandingAndDashboard() {
             {/* Left Panel: Inputs (4 Columns) — ✅ 3D Tilt + V5 metadata inputs */}
             <motion.div 
               className="lg:col-span-4 flex flex-col gap-6"
-              style={{ rotateX: tilt2.rotateX, rotateY: tilt2.rotateY, transformPerspective: 1000 }}
-              onMouseMove={tilt2.handleMouseMove}
-              onMouseLeave={tilt2.handleMouseLeave}
             >
               <div className="premium-card p-6 border-t border-l border-white/20 h-full flex flex-col justify-between">
                 <h3 className="text-lg font-bold font-display mb-6 flex items-center gap-2 border-b border-white/10 pb-4 drop-shadow-md">
@@ -419,14 +432,57 @@ export default function LandingAndDashboard() {
                   <ul className="text-xs text-gray-300 space-y-2 list-disc pl-4 marker:text-[#00D4FF]">
                     <li>Upload a clear, well-lit dermoscopic or macro-lens skin image.</li>
                     <li>Ensure the lesion is centered and occupies the majority of the frame.</li>
-                    <li><span className="font-semibold text-white">No metadata needed:</span> V5 operates entirely on Dual-Head inference from raw pixels alone (Age, Sex, Site are not required).</li>
+                    <li><span className="font-semibold text-white">Optional Metadata:</span> Providing Patient Age, Sex, and Anatomical Site increases the Meta-Learner's diagnostic precision.</li>
                   </ul>
                 </div>
                 
 
 
+                {/* Metadata Inputs */}
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Patient Age</label>
+                    <input 
+                      type="number" 
+                      placeholder="e.g. 45" 
+                      value={age}
+                      onChange={(e) => setAge(e.target.value)}
+                      className="w-full bg-[#1A2235] border border-white/10 rounded-lg px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-[#00D4FF] focus:ring-1 focus:ring-[#00D4FF] transition-all"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Biological Sex</label>
+                    <select 
+                      value={sex}
+                      onChange={(e) => setSex(e.target.value)}
+                      className="w-full bg-[#1A2235] border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#00D4FF] focus:ring-1 focus:ring-[#00D4FF] transition-all appearance-none"
+                    >
+                      <option value="">Unknown</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                    </select>
+                  </div>
+                  <div className="col-span-2">
+                    <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Anatomical Site</label>
+                    <select 
+                      value={anatomSite}
+                      onChange={(e) => setAnatomSite(e.target.value)}
+                      className="w-full bg-[#1A2235] border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#00D4FF] focus:ring-1 focus:ring-[#00D4FF] transition-all appearance-none"
+                    >
+                      <option value="">Unknown</option>
+                      <option value="head/neck">Head/Neck</option>
+                      <option value="anterior torso">Anterior Torso</option>
+                      <option value="posterior torso">Posterior Torso</option>
+                      <option value="upper extremity">Upper Extremity</option>
+                      <option value="lower extremity">Lower Extremity</option>
+                      <option value="oral/genital">Oral/Genital</option>
+                      <option value="palms/soles">Palms/Soles</option>
+                    </select>
+                  </div>
+                </div>
+
                 {/* Image Upload */}
-                <div className="mt-8 pt-6 border-t border-white/10">
+                <div className="mt-6 pt-6 border-t border-white/10">
                   <label 
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
@@ -660,21 +716,47 @@ export default function LandingAndDashboard() {
                           )}
 
                           {/* Continuous Learning Feedback */}
-                          <div className="mt-4 pt-4 border-t border-white/10">
-                            <button 
-                              onClick={() => setShowFeedback(!showFeedback)}
-                              className="text-xs text-gray-400 hover:text-[#00D4FF] transition-colors underline flex items-center justify-center w-full"
-                            >
-                              Diagnosis Incorrect? Submit Correction
-                            </button>
+                          <div className="mt-6 pt-5 border-t border-white/10">
+                            <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 text-center">Clinical Verification</h4>
                             
                             <AnimatePresence>
-                              {showFeedback && (
+                              {showThankYou ? (
+                                <motion.div 
+                                  initial={{ opacity: 0, scale: 0.9 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  exit={{ opacity: 0, scale: 0.9 }}
+                                  className="bg-emerald-500/20 border border-emerald-500/30 rounded-lg p-4 text-center"
+                                >
+                                  <div className="text-emerald-400 font-bold mb-1">Thank You!</div>
+                                  <div className="text-xs text-emerald-300">Your verification has been added to the Active Learning pipeline. Clearing scanner...</div>
+                                </motion.div>
+                              ) : (
+                                <motion.div className="flex flex-col gap-3">
+                                  <button 
+                                    onClick={() => submitFeedback(true)}
+                                    disabled={feedbackSubmitting}
+                                    className="w-full bg-emerald-600/20 hover:bg-emerald-600/40 text-emerald-400 border border-emerald-500/30 py-2.5 rounded-lg font-bold text-sm transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                                  >
+                                    ✅ Confirm Diagnosis
+                                  </button>
+                                  
+                                  <button 
+                                    onClick={() => setShowFeedback(!showFeedback)}
+                                    className="w-full bg-red-600/20 hover:bg-red-600/40 text-red-400 border border-red-500/30 py-2.5 rounded-lg font-bold text-sm transition-all flex items-center justify-center gap-2"
+                                  >
+                                    ❌ Overrule AI
+                                  </button>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                            
+                            <AnimatePresence>
+                              {showFeedback && !showThankYou && (
                                 <motion.div 
                                   initial={{ opacity: 0, height: 0 }}
                                   animate={{ opacity: 1, height: 'auto' }}
                                   exit={{ opacity: 0, height: 0 }}
-                                  className="mt-3 bg-black/40 p-3 rounded-lg border border-white/5 overflow-hidden"
+                                  className="mt-3 bg-black/40 p-3 rounded-lg border border-red-500/20 overflow-hidden"
                                 >
                                   <label className="block text-xs text-gray-300 mb-2">Select True Diagnosis:</label>
                                   <select 
@@ -690,13 +772,15 @@ export default function LandingAndDashboard() {
                                     <option value="df">Dermatofibroma (DF)</option>
                                     <option value="vasc">Vascular Lesion (VASC)</option>
                                     <option value="scc">Squamous Cell Carcinoma (SCC)</option>
+                                    <option value="unk">Unknown</option>
                                   </select>
+                                  
                                   <button 
-                                    onClick={submitFeedback}
+                                    onClick={() => submitFeedback(false)}
                                     disabled={feedbackSubmitting}
-                                    className="w-full py-2 bg-gradient-to-r from-blue-600 to-[#00D4FF] hover:from-blue-500 hover:to-cyan-400 text-white rounded text-xs font-bold transition-all disabled:opacity-50"
+                                    className="w-full bg-red-600 hover:bg-red-500 text-white py-2 rounded font-bold text-sm shadow-[0_0_15px_rgba(220,38,38,0.4)] disabled:opacity-50"
                                   >
-                                    {feedbackSubmitting ? 'Submitting...' : 'Submit to Replay Buffer'}
+                                    {feedbackSubmitting ? "Saving..." : "Submit to Replay Buffer"}
                                   </button>
                                 </motion.div>
                               )}
@@ -838,8 +922,8 @@ export default function LandingAndDashboard() {
           <div className="pipeline" id="pipeline">
             {[
               { 
-                icon: Scan, title: "Dermoscopy Image", sub: "INPUT · 224×224", 
-                modal: <><p className="mb-3 text-gray-300"><strong>Overview:</strong> The high-resolution, magnified starting picture of the skin lesion.</p><p className="text-gray-400"><strong>Technical Detail:</strong> Accepts raw image inputs, resizing them to 224x224 RGB tensors. The data pipeline applies standard normalization and center-cropping to prepare the visual matrix for the convolutional network.</p></>
+                icon: Scan, title: "Dermoscopy Image", sub: "INPUT · 380×380", 
+                modal: <><p className="mb-3 text-gray-300"><strong>Overview:</strong> The high-resolution, magnified starting picture of the skin lesion.</p><p className="text-gray-400"><strong>Technical Detail:</strong> Accepts raw image inputs, resizing them to 380x380 RGB tensors. The data pipeline applies standard normalization and center-cropping to prepare the visual matrix for the convolutional network.</p></>
               },
               { arrow: true },
               { 

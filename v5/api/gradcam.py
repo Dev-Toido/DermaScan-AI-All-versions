@@ -7,23 +7,30 @@ def generate_gradcam(model, image_array, class_idx):
     """
     Generate Grad-CAM heatmap for a single-input Image model.
     """
-    # Find the final convolutional layer of EfficientNetB4
-    conv_layer = None
+    # Target the 'multiply' layer, but instead of using its output (which is heavily masked),
+    # grab its FIRST input tensor. This gives us the raw EfficientNetB4 feature map in the OUTER graph,
+    # preventing the 'Graph disconnected' ValueError when building the Grad-CAM sub-model.
+    conv_output = None
     for layer in reversed(model.layers):
-        if hasattr(layer, 'output_shape') and isinstance(layer.output_shape, tuple) and len(layer.output_shape) == 4:
-            conv_layer = layer
+        if layer.name == 'multiply':
+            if hasattr(layer, 'input') and isinstance(layer.input, list) and len(layer.input) > 0:
+                conv_output = layer.input[0]
             break
             
-    if conv_layer is None:
-        raise ValueError("Could not find a valid 4D convolutional layer for Grad-CAM.")
+    if conv_output is None:
+        # Fallback to the last 4D layer's output
+        for layer in reversed(model.layers):
+            if hasattr(layer, 'output_shape') and isinstance(layer.output_shape, tuple) and len(layer.output_shape) == 4:
+                conv_output = layer.output
+                break
+                
+    if conv_output is None:
+        raise ValueError("Could not find a valid 4D convolutional tensor for Grad-CAM.")
         
     # We want gradients of the DDX head (which is the first output)
-    # The V5 model returns a list of outputs: [ddx_head, etiology_head]
-    # In TensorFlow Model, if output is a list, model.output is a list.
-    
     grad_model = tf.keras.models.Model(
         inputs=model.inputs,
-        outputs=[conv_layer.output, model.output[0]] # index 0 is ddx_head
+        outputs=[conv_output, model.output[0]] # index 0 is ddx_head
     )
     
     # img_input is already (1, 380, 380, 3) in main.py, but just in case:

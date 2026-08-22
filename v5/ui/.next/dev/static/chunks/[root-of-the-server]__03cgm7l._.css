@@ -565,13 +565,16 @@
     --color-red-300: #ffa3a3;
     --color-red-400: #ff6568;
     --color-red-500: #fb2c36;
+    --color-red-600: #e40014;
     --color-red-900: #82181a;
     --color-orange-400: #ff8b1a;
     --color-orange-500: #fe6e00;
     --color-yellow-400: #fac800;
     --color-yellow-500: #edb200;
+    --color-emerald-300: #5ee9b5;
     --color-emerald-400: #00d294;
     --color-emerald-500: #00bb7f;
+    --color-emerald-600: #009767;
     --color-cyan-400: #00d2ef;
     --color-cyan-500: #00b7d7;
     --color-blue-500: #3080ff;
@@ -654,13 +657,16 @@
       --color-red-300: lab(76.5514% 36.422 15.5335);
       --color-red-400: lab(63.7053% 60.745 31.3109);
       --color-red-500: lab(55.4814% 75.0732 48.8528);
+      --color-red-600: lab(48.4493% 77.4328 61.5452);
       --color-red-900: lab(28.5139% 44.5539 29.0463);
       --color-orange-400: lab(70.0429% 42.5156 75.8207);
       --color-orange-500: lab(64.272% 57.1788 90.3583);
       --color-yellow-400: lab(83.2664% 8.65132 106.895);
       --color-yellow-500: lab(76.3898% 14.5258 98.4589);
+      --color-emerald-300: lab(83.9203% -48.7124 13.8849);
       --color-emerald-400: lab(75.0771% -60.7313 19.4147);
       --color-emerald-500: lab(66.9756% -58.27 19.5419);
+      --color-emerald-600: lab(55.0481% -49.9246 15.93);
       --color-cyan-400: lab(76.6045% -40.9406 -29.6231);
       --color-cyan-500: lab(67.805% -35.3952 -30.2018);
       --color-blue-500: lab(54.1736% 13.3369 -74.6839);
@@ -1014,6 +1020,10 @@
     z-index: 100;
   }
 
+  .col-span-2 {
+    grid-column: span 2 / span 2;
+  }
+
   .m-0 {
     margin: 0;
   }
@@ -1322,6 +1332,10 @@
     list-style-type: disc;
   }
 
+  .appearance-none {
+    appearance: none;
+  }
+
   .grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1521,6 +1535,16 @@
     }
   }
 
+  .border-red-500\/20 {
+    border-color: #fb2c3633;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .border-red-500\/20 {
+      border-color: color-mix(in oklab, var(--color-red-500) 20%, transparent);
+    }
+  }
+
   .border-red-500\/30 {
     border-color: #fb2c364d;
   }
@@ -1613,6 +1637,10 @@
     background-color: lab(78.0283% -33.4424 -34.0028 / .3);
   }
 
+  .bg-\[\#1A2235\] {
+    background-color: #1a2235;
+  }
+
   .bg-\[\#050816\]\/10 {
     background-color: #0508161a;
     background-color: lab(2.31676% 1.09726 -7.30474 / .1);
@@ -1698,6 +1726,16 @@
     }
   }
 
+  .bg-emerald-600\/20 {
+    background-color: #00976733;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-emerald-600\/20 {
+      background-color: color-mix(in oklab, var(--color-emerald-600) 20%, transparent);
+    }
+  }
+
   .bg-gray-500\/20 {
     background-color: #6a728233;
   }
@@ -1725,6 +1763,20 @@
   @supports (color: color-mix(in lab, red, red)) {
     .bg-red-500\/20 {
       background-color: color-mix(in oklab, var(--color-red-500) 20%, transparent);
+    }
+  }
+
+  .bg-red-600 {
+    background-color: var(--color-red-600);
+  }
+
+  .bg-red-600\/20 {
+    background-color: #e4001433;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-red-600\/20 {
+      background-color: color-mix(in oklab, var(--color-red-600) 20%, transparent);
     }
   }
 
@@ -1931,6 +1983,10 @@
     padding-block: calc(var(--spacing) * 2);
   }
 
+  .py-2\.5 {
+    padding-block: calc(var(--spacing) * 2.5);
+  }
+
   .py-3 {
     padding-block: calc(var(--spacing) * 3);
   }
@@ -1957,6 +2013,10 @@
 
   .pt-4 {
     padding-top: calc(var(--spacing) * 4);
+  }
+
+  .pt-5 {
+    padding-top: calc(var(--spacing) * 5);
   }
 
   .pt-6 {
@@ -2149,6 +2209,10 @@
     color: var(--color-text-secondary);
   }
 
+  .text-emerald-300 {
+    color: var(--color-emerald-300);
+  }
+
   .text-emerald-400 {
     color: var(--color-emerald-400);
   }
@@ -2202,6 +2266,10 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  .placeholder-gray-500::placeholder {
+    color: var(--color-gray-500);
+  }
+
   .opacity-0 {
     opacity: 0;
   }
@@ -2245,6 +2313,11 @@
 
   .shadow-\[0_0_15px_rgba\(0\,212\,255\,0\.3\)\] {
     --tw-shadow: 0 0 15px var(--tw-shadow-color, #00d4ff4d);
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+
+  .shadow-\[0_0_15px_rgba\(220\,38\,38\,0\.4\)\] {
+    --tw-shadow: 0 0 15px var(--tw-shadow-color, #dc262666);
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
 
@@ -2525,6 +2598,30 @@
       background-color: lab(78.0283% -33.4424 -34.0028 / .05);
     }
 
+    .hover\:bg-emerald-600\/40:hover {
+      background-color: #00976766;
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .hover\:bg-emerald-600\/40:hover {
+        background-color: color-mix(in oklab, var(--color-emerald-600) 40%, transparent);
+      }
+    }
+
+    .hover\:bg-red-500:hover {
+      background-color: var(--color-red-500);
+    }
+
+    .hover\:bg-red-600\/40:hover {
+      background-color: #e4001466;
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .hover\:bg-red-600\/40:hover {
+        background-color: color-mix(in oklab, var(--color-red-600) 40%, transparent);
+      }
+    }
+
     .hover\:bg-white\/5:hover {
       background-color: #ffffff0d;
     }
@@ -2587,6 +2684,24 @@
       --tw-shadow: 0 10px 30px -8px var(--tw-shadow-color, #00d4ff66);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
+  }
+
+  .focus\:border-\[\#00D4FF\]:focus {
+    border-color: #00d4ff;
+  }
+
+  .focus\:ring-1:focus {
+    --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+
+  .focus\:ring-\[\#00D4FF\]:focus {
+    --tw-ring-color: #00d4ff;
+  }
+
+  .focus\:outline-none:focus {
+    --tw-outline-style: none;
+    outline-style: none;
   }
 
   .disabled\:cursor-not-allowed:disabled {

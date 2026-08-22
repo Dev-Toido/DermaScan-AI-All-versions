@@ -178,3 +178,17 @@ The DermaScan AI (V5) architecture was built and deployed utilizing the followin
   - cuDNN 8.9.2
 - **Backend Architecture:** Python 3.10+, FastAPI, Uvicorn, OpenCV (cv2), Pillow, Scikit-Learn.
 - **Frontend Architecture:** Node.js v18+, Next.js (React), TailwindCSS, Framer Motion.
+
+
+## 🔁 Dual-Stream Active Learning (V5.1)
+
+DermaScan V5 is equipped with a bleeding-edge Dual-Stream Active Learning pipeline that implements Continuous Domain Adaptation.
+
+When doctors interact with the AI report, their feedback is routed into two discrete streams:
+1.  **Verified Positives (Stream B):** When a doctor clicks `[ ✅ Confirm Diagnosis ]`, the image is routed to the `verified_positives` buffer. This allows the model to adapt to the specific local lighting and camera hardware of the clinic, reinforcing its baseline with human-verified successes.
+2.  **Hard Examples (Stream A):** When a doctor clicks `[ ❌ Overrule AI ]`, the image is routed to the `hard_examples` replay buffer. This heavily penalizes the model for blind spots.
+
+**The Tri-Stream Replay Generator** mathematically forces the `tf.data` pipeline to sample every training batch using a **75 / 15 / 10** split:
+-   **75%** Base ISIC 2024 Historical Data (Prevents Catastrophic Forgetting)
+-   **15%** Verified Positives (Domain Adaptation)
+-   **10%** Hard Examples (Error Correction)

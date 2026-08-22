@@ -3,7 +3,7 @@
 ## Model Details
 - **Architecture**: EfficientNetB4 (pre-trained on ImageNet) fine-tuned for dermatoscopic image classification.
 - **Inputs**: 
-  - `Image Input`: 224x224 RGB image (0-255 scaling, no normalization).
+  - `Image Input`: 380x380 RGB image (0-255 scaling, no normalization).
   - `Metadata Input`: 10-element vector (Age, Sex, 8-One-Hot Site encoding).
 - **Outputs**: Probabilities for 8 ISIC skin lesion classes (NV, MEL, BKL, DF, SCC, BCC, VASC, AK).
 - **Framework**: TensorFlow / Keras
