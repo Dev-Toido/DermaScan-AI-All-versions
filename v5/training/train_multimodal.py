@@ -1,5 +1,8 @@
 import os
 import tensorflow as tf
+from tensorflow.keras import mixed_precision
+
+mixed_precision.set_global_policy('mixed_float16')
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from dataset_multimodal import create_dataset_from_df
@@ -18,19 +21,19 @@ def train():
     
     # 1. First split: 80% for Base Models, 20% for Meta-Learner holdout
     # We save the holdout set for later!
-    df_base, df_meta = train_test_split(df, test_size=0.2, random_state=42, stratify=df['diagnosis'])
+    df_base, df_meta = train_test_split(df, test_size=0.2, random_state=42)
     
     # Save the meta holdout set for the metalearner training script
     df_meta.to_csv("meta_holdout.csv", index=False)
     print(f"Saved {len(df_meta)} samples for Meta-Learner holdout.")
     
     # 2. Second split: split the Base dataset into Train/Val for Model B
-    df_train, df_val = train_test_split(df_base, test_size=0.15, random_state=42, stratify=df_base['diagnosis'])
+    df_train, df_val = train_test_split(df_base, test_size=0.15, random_state=42)
     print(f"Model B - Train: {len(df_train)}, Val: {len(df_val)}")
     
     # 3. Create tf.data datasets
-    train_ds = create_dataset_from_df(df_train, batch_size=16, is_training=True, mask_prob=0.3)
-    val_ds = create_dataset_from_df(df_val, batch_size=16, is_training=False, mask_prob=0.0)
+    train_ds = create_dataset_from_df(df_train, batch_size=8, is_training=True, mask_prob=0.3)
+    val_ds = create_dataset_from_df(df_val, batch_size=8, is_training=False, mask_prob=0.0)
     
     # 4. Build Model
     model = create_v5_multimodal_model()

@@ -30,8 +30,8 @@ def create_v5_multimodal_model(img_size=(380, 380, 3), metadata_size=14, ddx_cla
     merged = Dropout(0.4)(merged)
     
     # --- Outputs ---
-    ddx_out = Dense(ddx_classes, activation='softmax', name='ddx_head')(merged)
-    eti_out = Dense(eti_classes, activation='softmax', name='etiology_head')(merged)
+    ddx_out = Dense(ddx_classes, activation='softmax', name='ddx_head', dtype='float32')(merged)
+    eti_out = Dense(eti_classes, activation='softmax', name='etiology_head', dtype='float32')(merged)
     
     model = Model(inputs=[img_input, meta_input], outputs=[ddx_out, eti_out], name="V5_Multimodal_Expert")
     return model
@@ -55,8 +55,8 @@ def create_v5_meta_learner(ddx_classes=10, eti_classes=4, metadata_size=14):
     x = Dropout(0.3)(x)
     
     # Output predicting the true diagnosis and etiology based on the ensemble inputs
-    ddx_out = Dense(ddx_classes, activation='softmax', name='ddx_head')(x)
-    eti_out = Dense(eti_classes, activation='softmax', name='etiology_head')(x)
+    ddx_out = Dense(ddx_classes, activation='softmax', name='ddx_head', dtype='float32')(x)
+    eti_out = Dense(eti_classes, activation='softmax', name='etiology_head', dtype='float32')(x)
     
     model = Model(inputs=meta_input, outputs=[ddx_out, eti_out], name="V5_Meta_Learner")
     return model

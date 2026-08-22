@@ -1,67 +1,69 @@
-# DermaScan AI 🔬
+# DermaScan AI (V5) 🔬
 
-> **An AI-powered dermatological diagnostic assistant, designed to detect and classify skin lesions with high precision.**
+> **An advanced, multi-modal AI diagnostic assistant designed to triage skin lesions and mitigate skin-tone bias in dermatological deployments.**
 
-![DermaScan AI Model Accuracy](https://img.shields.io/badge/Model_Accuracy-67.75%25-brightgreen)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen)
-![Version](https://img.shields.io/badge/version-v4.0.0-blue)
+![Version](https://img.shields.io/badge/version-v5.0.0-blue)
+![Python](https://img.shields.io/badge/python-3.10%2B-blue)
+![TensorFlow](https://img.shields.io/badge/TensorFlow-2.15-orange)
 
 ## 📖 Overview
-DermaScan AI is a clinical decision-support tool. It assists dermatologists and general practitioners in triaging skin lesions from dermoscopic images by combining visual patterns with patient metadata. DermaScan AI analyzes dermatoscopic images alongside patient metadata (age, sex, anatomical site) to predict the likelihood of 8 distinct skin conditions, providing Grad-CAM visual explanations and clinically mapped recommendations.
+DermaScan AI (V5) is our most robust clinical decision-support architecture to date. Moving past the legacy flat-classification of V3 and V4, V5 introduces a **Dual-Head Multi-modal Architecture**. By fusing high-resolution dermoscopic images with 14-dimensional patient metadata (Age, Sex, Site), V5 categorizes lesions into 4 core biological Etiology Families before outputting the final 10-class diagnostic prediction.
 
-## 📂 Project Structure
-This repository contains multiple iterations of the DermaScan architecture:
-- **`v4/`**: The latest V4 architecture, featuring a modern **FastAPI** backend and a **Next.js** frontend. Highly scalable and decoupled.
-- **`v3/`**: The stable V3 architecture, powered by **Streamlit** and our proven Keras models.
-- **`v2_archive/`**: Legacy codebase for historical reference.
-- **`docs/`**: Marketing website files, comprehensive project documentation, and reports.
-- **`scripts/` & `tests/`**: Testing and utility scripts.
+This structure acts as a "clinical safety net," utilizing **Focal Loss** to heavily penalize False Negatives for melanocytic and malignant lesions.
 
-## 🧠 Model Architecture & Performance
-- **Model**: Multi-modal EfficientNetB4 fusing image features with patient metadata (Age, Sex, 8-One-Hot Site encoding).
-- **Outputs**: Probabilities for 8 ISIC skin lesion classes (NV, MEL, BKL, DF, SCC, BCC, VASC, AK).
-- **Overall Accuracy**: 67.75% on a holdout balanced test set of 400 images.
-- **Explainability**: Fully compatible with Grad-CAM to highlight the regions the model focuses on.
-- *Note: Please see `docs/project/MODEL_CARD.md` for full model details, ethical considerations, and bias handling.*
+---
 
-## 🚀 Getting Started
+## 📊 Comprehensive Reporting & Clinical Metrics
+DermaScan AI includes an exhaustive reporting pipeline. We have synthesized technical benchmarks, biological variance metrics, and clinical utility into a single master document.
 
-### V4 (Latest Architecture: Next.js + FastAPI)
-The V4 application is our modern web-stack version.
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/Dev-Toido/DermaScan-AI-V3.git
-   cd DermaScan-AI-V3
-   ```
-2. **Run the V4 Launch Script:**
-   ```bash
-   chmod +x run_v4.sh
-   ./run_v4.sh
-   ```
-   This script will start the FastAPI backend on `http://localhost:8000` and the Next.js frontend on `http://localhost:3000`.
+👉 **[Read the Super Detailed Full Report Here](docs/Super_Detailed_Full_Report.md)**
 
-### V3 (Streamlit App)
-The V3 application is robust, tested, and ready for rapid local deployment.
-1. **Navigate to the v3 directory:**
-   ```bash
-   cd v3
-   ```
-2. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. **Run the Streamlit interface:**
-   ```bash
-   streamlit run app.py
-   ```
+---
 
-## 🌐 Live Deployments
-- **V4 App (Latest Architecture)**: [derma-scan-ai-all-versions.vercel.app](https://derma-scan-ai-all-versions.vercel.app/)
-- **V3 Streamlit App**: [dermascan-ai-v3.streamlit.app](https://dermascan-ai-v3.streamlit.app/)
-- **Marketing Website**: [dev-toido.github.io/DermaScan-AI-All-versions](https://dev-toido.github.io/DermaScan-AI-All-versions/)
-- **V4 Backend API**: Hosted on Render
+## 🚀 Getting Started (The One-Click Pipeline)
 
-*(See `docs/project/DEPLOYMENT.md` for detailed instructions)*
+This repository comes pre-packaged with a multi-agent orchestration script. You can run the entire model inference testing suite, trigger the reporting subagents, and compile the final Markdown reports with a single command.
+
+### 1. Prerequisites & Cloning
+You must have [Miniconda](https://docs.conda.io/en/latest/miniconda.html) installed.
+```bash
+git clone https://github.com/Dev-Toido/DermaScan-AI-All-versions.git
+cd DermaScan-AI-All-versions
+```
+
+### 2. Dataset Setup
+*Note: Due to size constraints, the raw image datasets are not hosted in this repository.*
+1. Download the merged ISIC + DermaCon-IN datasets from [Insert Kaggle/Drive Link Here].
+2. Extract the images into the `archive/` folder at the root directory.
+
+### 3. Initialize the Environment
+Create the Conda environment using our exact specifications:
+```bash
+conda env create -f environment.yml
+conda activate dermascan
+```
+
+### 4. Run the Pipeline
+We have provided a "one-click" script that acts as the entrypoint for all 4 reporting subagents.
+```bash
+chmod +x run_super_report.sh
+./run_super_report.sh
+```
+
+**What this script does:**
+1. Loads the test datasets and mounts the Dual-Head V5 models to your GPU.
+2. Generates the `metrics.json` via the inference suite.
+3. Deploys the Clinical and Literature Subagents to generate qualitative analysis.
+4. Compiles the quantitative scores and qualitative research into the final `docs/Super_Detailed_Full_Report.md`.
+
+---
+
+## 📁 Repository Structure
+- **`v5/`**: The bleeding-edge V5 architecture (Dual-Head Models, Multi-modal TF Datasets, Focal Loss training loops).
+- **`v5/reporting_agents/`**: Python subagents dedicated to analyzing and generating documentation.
+- **`docs/`**: Generated reports, model cards, and the Super Detailed Report.
+- **`v4/` & `v3/`**: Legacy architectures for historical reference.
 
 ## ⚠️ Disclaimer
 **ACADEMIC PROTOTYPE – Not for clinical use.** This tool is designed to assist, not replace, a medical professional. It is not FDA-approved or certified for definitive clinical diagnosis.

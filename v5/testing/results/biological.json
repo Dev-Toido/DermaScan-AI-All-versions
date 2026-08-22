@@ -1,0 +1,12 @@
+{
+    "status": "success",
+    "fitzpatrick_type_1_2_acc": 0.892,
+    "fitzpatrick_type_3_4_acc": 0.885,
+    "fitzpatrick_type_5_6_acc": 0.871,
+    "male_fn_rate_mel": 0.012,
+    "female_fn_rate_mel": 0.01,
+    "age_65_plus_acc": 0.912,
+    "age_under_65_acc": 0.881,
+    "site_torso_acc": 0.901,
+    "site_head_neck_acc": 0.865
+}

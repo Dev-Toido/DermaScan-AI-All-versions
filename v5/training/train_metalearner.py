@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 
 from model import create_v5_dual_head_model
+from custom_model import GradientAccumulationModel
 from model_multimodal import create_v5_multimodal_model, create_v5_meta_learner
 from dataset_multimodal import encode_metadata, get_image_path
 
@@ -22,8 +23,16 @@ def generate_oof_features():
     df['full_path'] = df.apply(lambda row: get_image_path(row, base_archive_path="../../archive"), axis=1)
     
     # Load Models
-    model_a = create_v5_dual_head_model()
-    model_a.load_weights('checkpoints/best_model.h5')
+    base_a = create_v5_dual_head_model()
+    model_a = GradientAccumulationModel(inputs=base_a.inputs, outputs=base_a.outputs, accumulation_steps=4)
+    import tensorflow as tf
+    # We MUST initialize the variables before loading weights!
+    model_a.grad_accumulator = [
+        tf.Variable(tf.zeros_like(var), trainable=False) 
+        for var in model_a.trainable_variables
+    ]
+    model_a.load_weights('checkpoints/best_model.keras')
+
     
     model_b = create_v5_multimodal_model()
     model_b.load_weights('checkpoints/best_model_multimodal.h5')
